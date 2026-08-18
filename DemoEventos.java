@@ -1,25 +1,3 @@
-/*
- DemoEventos.java
- Demo de Programación Orientada a Eventos con Swing.
-
- Breve explicación (en español):
- - Event Dispatch Thread (EDT): es el hilo encargado de procesar
-   eventos de la interfaz gráfica (clics, repaints, timers, etc.)
-   y de ejecutar las actualizaciones de los componentes Swing.
-   Acceder o modificar componentes Swing desde hilos distintos
-   al EDT puede producir condiciones de carrera y errores visuales.
- - Por eso la aplicación se lanza con SwingUtilities.invokeLater:
-   para asegurarnos de crear y manipular la GUI dentro del EDT.
-
- Requisitos cumplidos:
- - Un único archivo autocontenido `DemoEventos.java`.
- - Uso de lambda en `addActionListener` (no clases anónimas).
- - Comentarios en español encima de cada listener indicando
-   fuente, evento y acción para leerlos en la exposición.
- - Diseño con BorderLayout y tamaño 400x300, fuente grande.
- - Solo usa librerías estándar (javax.swing, java.awt y java.time).
-*/
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -41,7 +19,7 @@ public class DemoEventos {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Demo: Programación Orientada a Eventos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(500, 400);
         frame.setLayout(new BorderLayout(10, 10));
 
         // Etiqueta grande con el contador (centrada)
@@ -51,7 +29,7 @@ public class DemoEventos {
 
         // Etiqueta pequeña para mostrar el último evento ocurrido
         ultimoEventoLabel = new JLabel("Último evento: ninguno", SwingConstants.CENTER);
-        ultimoEventoLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        ultimoEventoLabel.setFont(new Font("SansSerif", Font.PLAIN, 30));
         frame.add(ultimoEventoLabel, BorderLayout.NORTH);
 
         // Panel inferior con los tres botones: +1, -1 y Reiniciar
