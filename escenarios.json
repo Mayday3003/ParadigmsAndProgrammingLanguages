@@ -1,0 +1,178 @@
+{
+  "_ayuda": "Pesos de 0 a 5 por criterio. Puedes editar, quitar o agregar escenarios sin tocar el código. Los criterios 'medidos' salen del análisis; los 'cualitativos' son conocimiento general del lenguaje (no se miden del código) y se muestran marcados como tales.",
+  "criterios": {
+    "mantenibilidad": {
+      "nombre": "Mantenibilidad",
+      "tipo": "medido",
+      "descripcion": "Deuda técnica y code smells por cada 1.000 líneas (SonarQube)."
+    },
+    "confiabilidad": {
+      "nombre": "Confiabilidad",
+      "tipo": "medido",
+      "descripcion": "Bugs detectados por SonarQube y ejecuciones fallidas en las pruebas."
+    },
+    "seguridad": {
+      "nombre": "Seguridad",
+      "tipo": "medido",
+      "descripcion": "Vulnerabilidades y security hotspots (SonarQube)."
+    },
+    "legibilidad": {
+      "nombre": "Legibilidad",
+      "tipo": "medido",
+      "descripcion": "Complejidad cognitiva por función (SonarQube) y ciclomática promedio (lizard)."
+    },
+    "concision": {
+      "nombre": "Concisión",
+      "tipo": "medido",
+      "descripcion": "Líneas de código efectivas para resolver el mismo problema."
+    },
+    "pureza_funcional": {
+      "nombre": "Pureza funcional",
+      "tipo": "medido",
+      "descripcion": "Violaciones a las reglas de la práctica (for, while, var, mutación…) por cada 100 líneas."
+    },
+    "garantias_funcionales": {
+      "nombre": "Garantías funcionales",
+      "tipo": "medido",
+      "descripcion": "Experimentos: % de errores inyectados (reasignar, mutar, tipo, errata, match incompleto) detectados antes de ejecutar, y tamaño máximo que soporta la recursión sin desbordar la pila."
+    },
+    "arranque_rapido": {
+      "nombre": "Arranque rápido",
+      "tipo": "medido",
+      "descripcion": "Tiempo total de ejecución con la entrada más pequeña."
+    },
+    "rendimiento_volumen": {
+      "nombre": "Rendimiento con volumen",
+      "tipo": "medido",
+      "descripcion": "Tiempo con la entrada más grande que ambos lograron procesar; 0 si un lenguaje falló."
+    },
+    "memoria": {
+      "nombre": "Uso de memoria",
+      "tipo": "medido",
+      "descripcion": "Memoria máxima (RSS) con la entrada más grande."
+    },
+    "ciclo_desarrollo": {
+      "nombre": "Ciclo de desarrollo",
+      "tipo": "medido",
+      "descripcion": "Tiempo de compilación/preparación antes de poder ejecutar."
+    },
+    "seguridad_tipos": {
+      "nombre": "Seguridad de tipos",
+      "tipo": "cualitativo",
+      "descripcion": "Errores detectados antes de ejecutar.",
+      "valores": {
+        "scala": 9,
+        "python": 4
+      },
+      "justificacion": "Scala tiene tipado estático verificado por el compilador; en Python las anotaciones no se verifican al ejecutar."
+    },
+    "facilidad_aprendizaje": {
+      "nombre": "Facilidad de aprendizaje",
+      "tipo": "cualitativo",
+      "descripcion": "Curva de aprendizaje para alguien nuevo.",
+      "valores": {
+        "scala": 4,
+        "python": 9
+      },
+      "justificacion": "Python tiene sintaxis mínima y es el lenguaje de enseñanza más usado; Scala combina POO, FP y un sistema de tipos avanzado."
+    },
+    "ecosistema": {
+      "nombre": "Ecosistema y comunidad",
+      "tipo": "cualitativo",
+      "descripcion": "Librerías, comunidad y oferta laboral.",
+      "valores": {
+        "scala": 6,
+        "python": 10
+      },
+      "justificacion": "Python domina en datos, IA y automatización; Scala es fuerte en big data (Spark) y backend en la JVM, con una comunidad más pequeña."
+    }
+  },
+  "escenarios": [
+    {
+      "id": "empresarial",
+      "nombre": "Sistema empresarial a largo plazo",
+      "icono": "🏢",
+      "descripcion": "Aplicación que crecerá durante años, con varios desarrolladores y cambios frecuentes.",
+      "pesos": {
+        "mantenibilidad": 5,
+        "confiabilidad": 5,
+        "seguridad_tipos": 5,
+        "legibilidad": 4,
+        "seguridad": 4,
+        "pureza_funcional": 2,
+        "rendimiento_volumen": 3,
+        "ecosistema": 2,
+        "garantias_funcionales": 5
+      }
+    },
+    {
+      "id": "prototipo",
+      "nombre": "Prototipo rápido / MVP",
+      "icono": "🚀",
+      "descripcion": "Validar una idea en pocos días; importa más la velocidad de desarrollo que la robustez.",
+      "pesos": {
+        "concision": 5,
+        "ciclo_desarrollo": 5,
+        "facilidad_aprendizaje": 4,
+        "arranque_rapido": 3,
+        "ecosistema": 3,
+        "legibilidad": 2
+      }
+    },
+    {
+      "id": "volumen",
+      "nombre": "Procesamiento de gran volumen",
+      "icono": "📈",
+      "descripcion": "Miles o millones de solicitudes; el tiempo de cómputo y la memoria son críticos.",
+      "pesos": {
+        "rendimiento_volumen": 5,
+        "memoria": 3,
+        "confiabilidad": 4,
+        "pureza_funcional": 2,
+        "seguridad_tipos": 3,
+        "garantias_funcionales": 3
+      }
+    },
+    {
+      "id": "junior",
+      "nombre": "Equipo junior / académico",
+      "icono": "🎓",
+      "descripcion": "Desarrolladores con poca experiencia que deben entender y modificar el código.",
+      "pesos": {
+        "facilidad_aprendizaje": 5,
+        "legibilidad": 5,
+        "concision": 3,
+        "ciclo_desarrollo": 3,
+        "mantenibilidad": 2,
+        "garantias_funcionales": 2
+      }
+    },
+    {
+      "id": "funcional",
+      "nombre": "Paradigma funcional estricto",
+      "icono": "λ",
+      "descripcion": "Lo que exige esta práctica: inmutabilidad, sin ciclos imperativos, funciones puras.",
+      "pesos": {
+        "pureza_funcional": 5,
+        "seguridad_tipos": 4,
+        "legibilidad": 3,
+        "confiabilidad": 3,
+        "concision": 2,
+        "garantias_funcionales": 5
+      }
+    },
+    {
+      "id": "script",
+      "nombre": "Script o automatización ocasional",
+      "icono": "⚙️",
+      "descripcion": "Herramienta que se ejecuta de vez en cuando con pocos datos.",
+      "pesos": {
+        "arranque_rapido": 5,
+        "ciclo_desarrollo": 5,
+        "concision": 4,
+        "memoria": 3,
+        "facilidad_aprendizaje": 3
+      }
+    }
+  ]
+}

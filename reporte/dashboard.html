@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scala vs Python</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<style>
+:root{
+  --bg:#f6f7f9;--panel:#fff;--ink:#18202c;--muted:#5d6878;--line:#e3e7ed;--soft:#f0f2f5;
+  --scala:#c8323a;--scala-soft:#fbe9ea;--python:#2f6fa8;--python-soft:#e6f0f9;
+  --ok:#1f8a5b;--ok-soft:#e5f5ed;--bad:#c0392b;--bad-soft:#fbeaea;--warn:#b7791f;--warn-soft:#fdf3e1;
+  --shadow:0 1px 2px rgba(16,24,40,.05),0 2px 8px rgba(16,24,40,.04);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1319;--panel:#171c24;--ink:#e6e9ee;--muted:#98a2b3;--line:#2a313c;--soft:#1e242e;
+  --scala:#f0676d;--scala-soft:#3a1f22;--python:#6aa8e0;--python-soft:#1b2a3a;
+  --ok:#4cc38a;--ok-soft:#173326;--bad:#f07167;--bad-soft:#3a1d1b;--warn:#e5b454;--warn-soft:#352a14;--shadow:none}}
+:root[data-theme="dark"]{
+  --bg:#0f1319;--panel:#171c24;--ink:#e6e9ee;--muted:#98a2b3;--line:#2a313c;--soft:#1e242e;
+  --scala:#f0676d;--scala-soft:#3a1f22;--python:#6aa8e0;--python-soft:#1b2a3a;
+  --ok:#4cc38a;--ok-soft:#173326;--bad:#f07167;--bad-soft:#3a1d1b;--warn:#e5b454;--warn-soft:#352a14;--shadow:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 16px 64px}
+header{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:flex-end;margin-bottom:22px}
+h1{font-size:28px;line-height:1.15;margin:0 0 6px;letter-spacing:-.02em}
+h2{font-size:19px;margin:0 0 4px}
+h3{font-size:15px;margin:0 0 8px}
+.sub{color:var(--muted);margin:0}
+.meta{color:var(--muted);font-size:13px;text-align:right}
+.meta code{background:var(--soft);padding:1px 6px;border-radius:5px}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 22px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
+nav a{color:var(--ink);text-decoration:none;font-size:13px;padding:6px 11px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+nav a:hover{border-color:var(--muted)}
+section{margin:0 0 34px}
+.sec-head{margin-bottom:14px}
+.sec-head p{color:var(--muted);margin:2px 0 0;font-size:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:900px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.g2,.g3,.g4{grid-template-columns:1fr}h1{font-size:23px}.meta{text-align:left}}
+.tag{white-space:nowrap;display:inline-block;font-size:12px;font-weight:650;padding:2px 9px;border-radius:999px}
+.t-scala{background:var(--scala-soft);color:var(--scala)}
+.t-python{background:var(--python-soft);color:var(--python)}
+.t-tie{background:var(--soft);color:var(--muted)}
+.t-ok{background:var(--ok-soft);color:var(--ok)}
+.t-bad{background:var(--bad-soft);color:var(--bad)}
+.t-warn{background:var(--warn-soft);color:var(--warn)}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.verdict-big{font-size:22px;font-weight:700;margin:6px 0 4px;letter-spacing:-.01em}
+.score-row{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px}
+.score-row .lbl{width:58px;color:var(--muted)}
+.bar{flex:1;height:9px;background:var(--soft);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px}
+.score-row b{width:40px;text-align:right;font-variant-numeric:tabular-nums}
+.esc h3{display:flex;gap:8px;align-items:center}
+.esc .ico{font-size:18px;width:26px;text-align:center}
+.esc .desc{color:var(--muted);font-size:13px;margin:0 0 10px;min-height:38px}
+.why{font-size:13px;margin:10px 0 0;padding:0;list-style:none}
+.why li{padding:3px 0;color:var(--muted)}
+.why li b{color:var(--ink);font-weight:600}
+.kpi .v{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--muted);font-size:12.5px}
+.kpi .vs{display:flex;gap:14px;align-items:baseline}
+.kpi .vs span{font-size:12px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+.win{font-weight:700}
+.chart{position:relative;height:320px}
+.chart.sm{height:260px}
+.note{font-size:13px;color:var(--muted)}
+.empty{color:var(--muted);font-size:14px;padding:14px;background:var(--soft);border-radius:10px}
+select,button{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.rule{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.rule:last-child{border:0}
+details{margin-top:10px}summary{cursor:pointer;color:var(--muted);font-size:13px}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.gar-cell{display:flex;flex-direction:column;gap:4px}
+.gar-cell .note{font-size:12px}
+pre.inj{margin:6px 0 0;padding:8px 10px;background:var(--soft);border-radius:8px;font-size:12px;white-space:pre-wrap;overflow-x:auto}
+.big{font-size:34px;font-weight:750;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+a{color:var(--python)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>Scala vs Python · Soporte360</h1>
+    <p class="sub">Análisis comparativo con SonarQube, métricas estáticas, reglas funcionales y rendimiento</p>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+<nav>
+  <a href="#veredicto">Veredicto</a><a href="#garantias">Garantías funcionales</a><a href="#escenarios">Escenarios</a><a href="#criterios">Criterios</a>
+  <a href="#sonar">SonarQube</a><a href="#complejidad">Complejidad</a><a href="#reglas">Reglas funcionales</a>
+  <a href="#rendimiento">Rendimiento</a><a href="#cambios">Cambios</a><a href="#metodo">Metodología</a>
+  <button id="tema" style="margin-left:auto">◐ Tema</button>
+</nav>
+
+<section id="veredicto"><div class="hero">
+  <div class="card" id="hero-main"></div>
+  <div class="card"><h3>Puntaje por escenario</h3><div class="chart sm"><canvas id="c-esc"></canvas></div></div>
+</div></section>
+
+<section id="garantias">
+  <div class="sec-head"><h2>Garantías del paradigma funcional</h2><p>Experimentos sobre copias del código: ¿el lenguaje <b>impide</b> romper las reglas funcionales, o depende solo de la disciplina del programador?</p></div>
+  <div id="garantias-body"></div>
+</section>
+
+<section id="escenarios">
+  <div class="sec-head"><h2>¿Cuál es mejor en cada escenario?</h2><p>Cada escenario pondera los criterios de forma distinta. Los pesos se editan en <code>escenarios.json</code>.</p></div>
+  <div class="grid g3" id="esc-cards"></div>
+</section>
+
+<section id="criterios">
+  <div class="sec-head"><h2>Criterios (puntaje 0–10)</h2><p>Normalización relativa entre ambos lenguajes. Los criterios cualitativos no se miden del código y están marcados.</p></div>
+  <div class="grid g2" style="align-items:start">
+    <div class="card" style="position:sticky;top:56px"><div class="toolbar"><label>Escenario <select id="sel-radar"></select></label></div><div class="chart"><canvas id="c-radar"></canvas></div></div>
+    <div class="card tbl" id="tabla-criterios"></div>
+  </div>
+</section>
+
+<section id="sonar">
+  <div class="sec-head"><h2>SonarQube · SonarAnalyzer</h2><p id="sonar-sub"></p></div>
+  <div id="sonar-body"></div>
+</section>
+
+<section id="complejidad">
+  <div class="sec-head"><h2>Complejidad por función (lizard)</h2><p>Mismo analizador y mismo criterio para ambos lenguajes.</p></div>
+  <div class="grid g4" id="kpi-comp" style="margin-bottom:14px"></div>
+  <div class="grid g2">
+    <div class="card"><h3>Funciones más complejas · Scala</h3><div class="chart"><canvas id="c-fn-scala"></canvas></div></div>
+    <div class="card"><h3>Funciones más complejas · Python</h3><div class="chart"><canvas id="c-fn-python"></canvas></div></div>
+  </div>
+</section>
+
+<section id="reglas">
+  <div class="sec-head"><h2>Reglas de la práctica</h2><p>Detectadas sobre el árbol de sintaxis (Python) y con un lexer que ignora comentarios y textos (Scala).</p></div>
+  <div class="grid g2" id="reglas-body"></div>
+</section>
+
+<section id="rendimiento">
+  <div class="sec-head"><h2>Rendimiento y equivalencia</h2><p id="rend-sub"></p></div>
+  <div id="rend-body"></div>
+</section>
+
+<section id="cambios">
+  <div class="sec-head"><h2>Cambios respecto a la ejecución anterior</h2><p>Se compara automáticamente con el último análisis guardado en <code>salidas/historial</code>.</p></div>
+  <div class="card" id="cambios-body"></div>
+</section>
+
+<section id="metodo">
+  <div class="sec-head"><h2>Metodología</h2></div>
+  <div class="card note" id="metodo-body"></div>
+</section>
+</div>
+
+<script>
+const D = {"fecha": "2026-11-03T08:34:22", "lenguajes": {"scala": {"nombre": "Scala", "carpeta": "scala/soporte360-scala", "archivos": ["soporte360/Analisis.scala", "soporte360/Entrada.scala", "soporte360/Main.scala", "soporte360/Modelo.scala", "soporte360/Reportes.scala", "soporte360/Validacion.scala"], "huella": "a87a82114b04"}, "python": {"nombre": "Python", "carpeta": "scala/soporte360-python", "archivos": ["analisis.py", "entrada.py", "main.py", "modelo.py", "reportes.py", "validacion.py"], "huella": "18ecbd5ef75f"}}, "sonar": {"estado": "ok", "url": "https://sonarcloud.io/dashboard?id=Mayday3003_ParadigmsAndProgrammingLanguages", "lenguajes": {"scala": {"ncloc": 377.0, "lines": 504.0, "functions": 60.0, "statements": 104.0, "classes": 3.0, "complexity": 82.0, "cognitive_complexity": 24.0, "code_smells": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "duplicated_lines": 0.0, "comment_lines": 40.0, "archivos": 6, "deuda_ratio": 0.0, "nota_mantenibilidad": "A", "nota_confiabilidad": "A", "nota_seguridad": "A", "hotspots": 0, "duplicacion_pct": 0.0, "comentarios_pct": 9.59, "complejidad_cognitiva_por_funcion": 0.4, "por_archivo": [{"archivo": "soporte360/Analisis.scala", "cognitive_complexity": 5.0, "comment_lines": 15.0, "complexity": 23.0, "functions": 20.0, "lines": 114.0, "ncloc": 75.0, "statements": 21.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "soporte360/Entrada.scala", "cognitive_complexity": 4.0, "comment_lines": 4.0, "complexity": 9.0, "functions": 6.0, "lines": 52.0, "ncloc": 40.0, "statements": 15.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "soporte360/Main.scala", "cognitive_complexity": 1.0, "comment_lines": 1.0, "complexity": 7.0, "functions": 4.0, "lines": 42.0, "ncloc": 33.0, "statements": 18.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "soporte360/Modelo.scala", "classes": 3.0, "cognitive_complexity": 1.0, "comment_lines": 4.0, "complexity": 7.0, "functions": 5.0, "lines": 70.0, "ncloc": 54.0, "statements": 5.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "soporte360/Reportes.scala", "cognitive_complexity": 6.0, "comment_lines": 15.0, "complexity": 23.0, "functions": 20.0, "lines": 181.0, "ncloc": 141.0, "statements": 39.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "soporte360/Validacion.scala", "cognitive_complexity": 7.0, "comment_lines": 1.0, "complexity": 13.0, "functions": 5.0, "lines": 45.0, "ncloc": 34.0, "statements": 6.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}], "issues": []}, "python": {"ncloc": 326.0, "lines": 497.0, "functions": 60.0, "statements": 237.0, "classes": 5.0, "complexity": 93.0, "cognitive_complexity": 39.0, "code_smells": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "duplicated_lines": 0.0, "comment_lines": 26.0, "archivos": 6, "deuda_ratio": 0.0, "nota_mantenibilidad": "A", "nota_confiabilidad": "A", "nota_seguridad": "A", "hotspots": 0, "duplicacion_pct": 0.0, "comentarios_pct": 7.39, "complejidad_cognitiva_por_funcion": 0.65, "por_archivo": [{"archivo": "analisis.py", "classes": 0.0, "cognitive_complexity": 6.0, "comment_lines": 5.0, "complexity": 23.0, "functions": 17.0, "lines": 97.0, "ncloc": 53.0, "statements": 46.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "entrada.py", "classes": 0.0, "cognitive_complexity": 3.0, "comment_lines": 3.0, "complexity": 6.0, "functions": 4.0, "lines": 48.0, "ncloc": 34.0, "statements": 28.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "main.py", "classes": 0.0, "cognitive_complexity": 5.0, "comment_lines": 7.0, "complexity": 7.0, "functions": 3.0, "lines": 52.0, "ncloc": 32.0, "statements": 28.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "modelo.py", "classes": 5.0, "cognitive_complexity": 4.0, "comment_lines": 4.0, "complexity": 6.0, "functions": 3.0, "lines": 64.0, "ncloc": 43.0, "statements": 32.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "reportes.py", "classes": 0.0, "cognitive_complexity": 11.0, "comment_lines": 2.0, "complexity": 32.0, "functions": 23.0, "lines": 178.0, "ncloc": 128.0, "statements": 68.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}, {"archivo": "validacion.py", "classes": 0.0, "cognitive_complexity": 10.0, "comment_lines": 5.0, "complexity": 19.0, "functions": 10.0, "lines": 58.0, "ncloc": 36.0, "statements": 35.0, "duplicated_lines": 0.0, "bugs": 0.0, "vulnerabilities": 0.0, "sqale_index": 0.0, "code_smells": 0.0}], "issues": []}}}, "estatico": {"scala": {"complejidad": {"nloc": 377, "funciones": 59, "ccn_promedio": 1.15, "ccn_maximo": 3, "nloc_promedio_funcion": 2.03, "funciones_ccn_mayor_10": 0, "detalle": [{"funcion": "siVacio", "archivo": "soporte360/Reportes.scala", "linea": 18, "ccn": 3, "nloc": 2, "parametros": 2, "tokens": 24}, {"funcion": "desde", "archivo": "soporte360/Modelo.scala", "linea": 41, "ccn": 2, "nloc": 2, "parametros": 1, "tokens": 25}, {"funcion": "loop", "archivo": "soporte360/Entrada.scala", "linea": 45, "ccn": 2, "nloc": 2, "parametros": 2, "tokens": 21}, {"funcion": "porcentaje", "archivo": "soporte360/Reportes.scala", "linea": 34, "ccn": 2, "nloc": 2, "parametros": 2, "tokens": 15}, {"funcion": "porcentajeAlta", "archivo": "soporte360/Analisis.scala", "linea": 97, "ccn": 2, "nloc": 2, "parametros": 1, "tokens": 17}, {"funcion": "promedio", "archivo": "soporte360/Analisis.scala", "linea": 33, "ccn": 2, "nloc": 2, "parametros": 1, "tokens": 17}, {"funcion": "recortar", "archivo": "soporte360/Reportes.scala", "linea": 21, "ccn": 2, "nloc": 2, "parametros": 2, "tokens": 15}, {"funcion": "textoObligatorio", "archivo": "soporte360/Validacion.scala", "linea": 6, "ccn": 2, "nloc": 2, "parametros": 1, "tokens": 21}, {"funcion": "buscarOpcion", "archivo": "soporte360/Modelo.scala", "linea": 11, "ccn": 1, "nloc": 2, "parametros": 2, "tokens": 31}, {"funcion": "categoriaMayorDemanda", "archivo": "soporte360/Analisis.scala", "linea": 24, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 21}, {"funcion": "categorias", "archivo": "soporte360/Reportes.scala", "linea": 58, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "clave", "archivo": "soporte360/Analisis.scala", "linea": 11, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 15}, {"funcion": "clientesFrecuentes", "archivo": "soporte360/Analisis.scala", "linea": 61, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 21}, {"funcion": "clientesFrecuentes", "archivo": "soporte360/Reportes.scala", "linea": 103, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "consultar", "archivo": "soporte360/Main.scala", "linea": 19, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "conteoPorCategoria", "archivo": "soporte360/Analisis.scala", "linea": 21, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 21}, {"funcion": "conteoPorPrioridad", "archivo": "soporte360/Analisis.scala", "linea": 94, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 21}, {"funcion": "criticas", "archivo": "soporte360/Analisis.scala", "linea": 81, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 17}, {"funcion": "criticas", "archivo": "soporte360/Reportes.scala", "linea": 120, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "desde", "archivo": "soporte360/Modelo.scala", "linea": 23, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 25}, {"funcion": "desde", "archivo": "soporte360/Modelo.scala", "linea": 32, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 25}, {"funcion": "dinero", "archivo": "soporte360/Reportes.scala", "linea": 11, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 28}, {"funcion": "economico", "archivo": "soporte360/Reportes.scala", "linea": 70, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "enteroNoNegativo", "archivo": "soporte360/Validacion.scala", "linea": 24, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 21}, {"funcion": "fila", "archivo": "soporte360/Reportes.scala", "linea": 27, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 11}, {"funcion": "general", "archivo": "soporte360/Reportes.scala", "linea": 38, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "idUnico", "archivo": "soporte360/Validacion.scala", "linea": 10, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 24}, {"funcion": "leerLinea", "archivo": "soporte360/Entrada.scala", "linea": 10, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 11}, {"funcion": "main", "archivo": "soporte360/Main.scala", "linea": 33, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "menuOpciones", "archivo": "soporte360/Entrada.scala", "linea": 26, "ccn": 1, "nloc": 2, "parametros": 2, "tokens": 23}, {"funcion": "normalizar", "archivo": "soporte360/Modelo.scala", "linea": 4, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 11}, {"funcion": "num", "archivo": "soporte360/Reportes.scala", "linea": 12, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 26}, {"funcion": "numeroNoNegativo", "archivo": "soporte360/Validacion.scala", "linea": 17, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 21}, {"funcion": "opcion", "archivo": "soporte360/Validacion.scala", "linea": 29, "ccn": 1, "nloc": 4, "parametros": 4, "tokens": 46}, {"funcion": "pedir", "archivo": "soporte360/Entrada.scala", "linea": 19, "ccn": 1, "nloc": 2, "parametros": 2, "tokens": 25}, {"funcion": "pedirSolicitud", "archivo": "soporte360/Entrada.scala", "linea": 29, "ccn": 1, "nloc": 2, "parametros": 3, "tokens": 22}, {"funcion": "pendientes", "archivo": "soporte360/Reportes.scala", "linea": 45, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "porEstado", "archivo": "soporte360/Analisis.scala", "linea": 17, "ccn": 1, "nloc": 2, "parametros": 2, "tokens": 21}, {"funcion": "prioridades", "archivo": "soporte360/Reportes.scala", "linea": 141, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "promedioHoras", "archivo": "soporte360/Analisis.scala", "linea": 86, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 28}, {"funcion": "registrar", "archivo": "soporte360/Entrada.scala", "linea": 43, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "resumenEjecutivo", "archivo": "soporte360/Analisis.scala", "linea": 102, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "resumenEjecutivo", "archivo": "soporte360/Reportes.scala", "linea": 151, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "resumenTecnicos", "archivo": "soporte360/Analisis.scala", "linea": 43, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 17}, {"funcion": "sinFinalizar", "archivo": "soporte360/Analisis.scala", "linea": 14, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 17}, {"funcion": "sobrePromedioHoras", "archivo": "soporte360/Analisis.scala", "linea": 88, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 17}, {"funcion": "tabla", "archivo": "soporte360/Reportes.scala", "linea": 31, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "tecnicoMayorCarga", "archivo": "soporte360/Analisis.scala", "linea": 57, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 17}, {"funcion": "tecnicos", "archivo": "soporte360/Reportes.scala", "linea": 89, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "tiemposElevados", "archivo": "soporte360/Reportes.scala", "linea": 132, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "titulo", "archivo": "soporte360/Reportes.scala", "linea": 14, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 11}, {"funcion": "todosLosReportes", "archivo": "soporte360/Main.scala", "linea": 15, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "topClientes", "archivo": "soporte360/Analisis.scala", "linea": 77, "ccn": 1, "nloc": 2, "parametros": 2, "tokens": 27}, {"funcion": "topClientes", "archivo": "soporte360/Reportes.scala", "linea": 111, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "topCostosas", "archivo": "soporte360/Analisis.scala", "linea": 39, "ccn": 1, "nloc": 2, "parametros": 2, "tokens": 23}, {"funcion": "topCostosas", "archivo": "soporte360/Reportes.scala", "linea": 80, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "valorPorCliente", "archivo": "soporte360/Analisis.scala", "linea": 70, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 21}, {"funcion": "valorPromedio", "archivo": "soporte360/Analisis.scala", "linea": 36, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 28}, {"funcion": "valorTotal", "archivo": "soporte360/Analisis.scala", "linea": 31, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 24}]}, "reglas": {"violaciones": [], "por_regla": {"for": 0, "while": 0, "do-while": 0, "var": 0, "reasignación": 0, "mutación": 0, "estado global": 0, "return": 0, "null": 0}, "total_violaciones": 0, "positivos": {"funciones": 60, "inmutables": 6, "lambdas": 46, "orden_superior": 89, "pattern_matching": 5, "recursivas": 5, "tailrec": 3}}, "violaciones_por_100_lineas": 0.0, "densidad_funcional": 35.81}, "python": {"complejidad": {"nloc": 327, "funciones": 60, "ccn_promedio": 1.57, "ccn_maximo": 5, "nloc_promedio_funcion": 4.37, "funciones_ccn_mayor_10": 0, "detalle": [{"funcion": "reporte_resumen_ejecutivo", "archivo": "reportes.py", "linea": 145, "ccn": 5, "nloc": 17, "parametros": 1, "tokens": 237}, {"funcion": "a_numero", "archivo": "validacion.py", "linea": 26, "ccn": 4, "nloc": 6, "parametros": 1, "tokens": 59}, {"funcion": "consultar", "archivo": "main.py", "linea": 26, "ccn": 4, "nloc": 10, "parametros": 1, "tokens": 87}, {"funcion": "buscar_opcion", "archivo": "modelo.py", "linea": 57, "ccn": 3, "nloc": 6, "parametros": 2, "tokens": 79}, {"funcion": "id_unico.validar", "archivo": "validacion.py", "linea": 17, "ccn": 3, "nloc": 6, "parametros": 1, "tokens": 68}, {"funcion": "numero_no_negativo.validar", "archivo": "validacion.py", "linea": 35, "ccn": 3, "nloc": 5, "parametros": 1, "tokens": 46}, {"funcion": "categoria_mayor_demanda", "archivo": "analisis.py", "linea": 30, "ccn": 2, "nloc": 5, "parametros": 1, "tokens": 67}, {"funcion": "contar", "archivo": "analisis.py", "linea": 22, "ccn": 2, "nloc": 2, "parametros": 2, "tokens": 31}, {"funcion": "criticas", "archivo": "analisis.py", "linea": 75, "ccn": 2, "nloc": 4, "parametros": 1, "tokens": 59}, {"funcion": "entero_no_negativo", "archivo": "validacion.py", "linea": 43, "ccn": 2, "nloc": 3, "parametros": 1, "tokens": 43}, {"funcion": "leer_linea", "archivo": "entrada.py", "linea": 10, "ccn": 2, "nloc": 6, "parametros": 1, "tokens": 29}, {"funcion": "normalizar", "archivo": "modelo.py", "linea": 8, "ccn": 2, "nloc": 3, "parametros": 1, "tokens": 57}, {"funcion": "opcion.validar", "archivo": "validacion.py", "linea": 53, "ccn": 2, "nloc": 4, "parametros": 1, "tokens": 42}, {"funcion": "pct", "archivo": "reportes.py", "linea": 22, "ccn": 2, "nloc": 2, "parametros": 2, "tokens": 30}, {"funcion": "pedir", "archivo": "entrada.py", "linea": 18, "ccn": 2, "nloc": 6, "parametros": 2, "tokens": 51}, {"funcion": "porcentaje_alta", "archivo": "analisis.py", "linea": 95, "ccn": 2, "nloc": 2, "parametros": 1, "tokens": 39}, {"funcion": "promedio", "archivo": "analisis.py", "linea": 41, "ccn": 2, "nloc": 2, "parametros": 1, "tokens": 26}, {"funcion": "recortar", "archivo": "reportes.py", "linea": 35, "ccn": 2, "nloc": 2, "parametros": 2, "tokens": 32}, {"funcion": "registrar", "archivo": "entrada.py", "linea": 41, "ccn": 2, "nloc": 6, "parametros": 3, "tokens": 63}, {"funcion": "reporte_categorias.contenido", "archivo": "reportes.py", "linea": 73, "ccn": 2, "nloc": 5, "parametros": 0, "tokens": 80}, {"funcion": "reporte_economico.contenido", "archivo": "reportes.py", "linea": 82, "ccn": 2, "nloc": 5, "parametros": 0, "tokens": 99}, {"funcion": "si_vacio", "archivo": "reportes.py", "linea": 31, "ccn": 2, "nloc": 2, "parametros": 3, "tokens": 32}, {"funcion": "sobre_promedio_horas", "archivo": "analisis.py", "linea": 85, "ccn": 2, "nloc": 4, "parametros": 1, "tokens": 62}, {"funcion": "texto_obligatorio", "archivo": "validacion.py", "linea": 12, "ccn": 2, "nloc": 2, "parametros": 1, "tokens": 36}, {"funcion": "agrupar", "archivo": "analisis.py", "linea": 49, "ccn": 1, "nloc": 3, "parametros": 2, "tokens": 66}, {"funcion": "clientes_frecuentes", "archivo": "analisis.py", "linea": 65, "ccn": 1, "nloc": 3, "parametros": 1, "tokens": 85}, {"funcion": "conteo_por_categoria", "archivo": "analisis.py", "linea": 26, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 38}, {"funcion": "conteo_por_prioridad", "archivo": "analisis.py", "linea": 91, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 38}, {"funcion": "dinero", "archivo": "reportes.py", "linea": 18, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 16}, {"funcion": "fila", "archivo": "reportes.py", "linea": 43, "ccn": 1, "nloc": 3, "parametros": 1, "tokens": 97}, {"funcion": "id_unico", "archivo": "validacion.py", "linea": 16, "ccn": 1, "nloc": 3, "parametros": 1, "tokens": 11}, {"funcion": "lineas", "archivo": "reportes.py", "linea": 39, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 14}, {"funcion": "main", "archivo": "main.py", "linea": 38, "ccn": 1, "nloc": 9, "parametros": 0, "tokens": 55}, {"funcion": "menu", "archivo": "main.py", "linea": 19, "ccn": 1, "nloc": 5, "parametros": 0, "tokens": 62}, {"funcion": "num", "archivo": "reportes.py", "linea": 13, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 38}, {"funcion": "numero_no_negativo", "archivo": "validacion.py", "linea": 34, "ccn": 1, "nloc": 3, "parametros": 1, "tokens": 11}, {"funcion": "opcion", "archivo": "validacion.py", "linea": 52, "ccn": 1, "nloc": 3, "parametros": 2, "tokens": 13}, {"funcion": "opciones_texto", "archivo": "validacion.py", "linea": 48, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 40}, {"funcion": "pedir_solicitud", "archivo": "entrada.py", "linea": 27, "ccn": 1, "nloc": 12, "parametros": 3, "tokens": 150}, {"funcion": "por_estado", "archivo": "analisis.py", "linea": 14, "ccn": 1, "nloc": 2, "parametros": 2, "tokens": 30}, {"funcion": "promedio_horas", "archivo": "analisis.py", "linea": 81, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 30}, {"funcion": "reporte_categorias", "archivo": "reportes.py", "linea": 72, "ccn": 1, "nloc": 3, "parametros": 1, "tokens": 25}, {"funcion": "reporte_clientes_frecuentes", "archivo": "reportes.py", "linea": 106, "ccn": 1, "nloc": 5, "parametros": 1, "tokens": 59}, {"funcion": "reporte_criticas", "archivo": "reportes.py", "linea": 120, "ccn": 1, "nloc": 8, "parametros": 1, "tokens": 142}, {"funcion": "reporte_economico", "archivo": "reportes.py", "linea": 81, "ccn": 1, "nloc": 3, "parametros": 1, "tokens": 25}, {"funcion": "reporte_general", "archivo": "reportes.py", "linea": 54, "ccn": 1, "nloc": 4, "parametros": 1, "tokens": 34}, {"funcion": "reporte_pendientes", "archivo": "reportes.py", "linea": 60, "ccn": 1, "nloc": 10, "parametros": 1, "tokens": 101}, {"funcion": "reporte_prioridades", "archivo": "reportes.py", "linea": 138, "ccn": 1, "nloc": 5, "parametros": 1, "tokens": 82}, {"funcion": "reporte_tecnicos", "archivo": "reportes.py", "linea": 97, "ccn": 1, "nloc": 7, "parametros": 1, "tokens": 121}, {"funcion": "reporte_tiempos_elevados", "archivo": "reportes.py", "linea": 130, "ccn": 1, "nloc": 6, "parametros": 1, "tokens": 54}, {"funcion": "reporte_top_clientes", "archivo": "reportes.py", "linea": 113, "ccn": 1, "nloc": 5, "parametros": 1, "tokens": 83}, {"funcion": "reporte_top_costosas", "archivo": "reportes.py", "linea": 90, "ccn": 1, "nloc": 5, "parametros": 1, "tokens": 96}, {"funcion": "resumen_tecnicos", "archivo": "analisis.py", "linea": 55, "ccn": 1, "nloc": 8, "parametros": 1, "tokens": 111}, {"funcion": "sin_finalizar", "archivo": "analisis.py", "linea": 18, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 28}, {"funcion": "tabla", "archivo": "reportes.py", "linea": 48, "ccn": 1, "nloc": 4, "parametros": 1, "tokens": 78}, {"funcion": "titulo", "archivo": "reportes.py", "linea": 26, "ccn": 1, "nloc": 3, "parametros": 1, "tokens": 23}, {"funcion": "top_costosas", "archivo": "analisis.py", "linea": 45, "ccn": 1, "nloc": 2, "parametros": 2, "tokens": 47}, {"funcion": "valor", "archivo": "modelo.py", "linea": 44, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 16}, {"funcion": "valor_por_cliente", "archivo": "analisis.py", "linea": 70, "ccn": 1, "nloc": 3, "parametros": 1, "tokens": 72}, {"funcion": "valor_total", "archivo": "analisis.py", "linea": 37, "ccn": 1, "nloc": 2, "parametros": 1, "tokens": 22}]}, "reglas": {"violaciones": [], "por_regla": {"for": 0, "while": 0, "do-while": 0, "var": 0, "reasignación": 0, "mutación": 0, "estado global": 0, "return": 0, "null": 0}, "total_violaciones": 0, "positivos": {"funciones": 60, "inmutables": 5, "lambdas": 62, "orden_superior": 52, "recursivas": 3}}, "violaciones_por_100_lineas": 0.0, "densidad_funcional": 34.86}}, "rendimiento": {"preparacion": {"scala": {"ok": true, "construccion_s": 14.17, "punto_entrada": "soporte360.Main", "error": null}, "python": {"ok": true, "construccion_s": 0.1, "punto_entrada": "main.py"}}, "corridas": 5, "tamanos": [{"n": 10, "lenguajes": {"scala": {"ok": true, "codigo_salida": 0, "memoria_mb": 74.8, "tiempo_s": 0.47, "error": null, "hyperfine": {"mean": 0.5452, "stddev": 0.0125, "min": 0.5306, "max": 0.5588, "median": 0.5455}}, "python": {"ok": true, "codigo_salida": 0, "memoria_mb": 13.7, "tiempo_s": 0.07, "error": null, "hyperfine": {"mean": 0.0625, "stddev": 0.0046, "min": 0.0587, "max": 0.069, "median": 0.0604}}}, "equivalencia": {"identicas": true, "lineas_diferentes": 0, "total_lineas": 847, "primera_diferencia": null}}, {"n": 100, "lenguajes": {"scala": {"ok": true, "codigo_salida": 0, "memoria_mb": 99.8, "tiempo_s": 0.63, "error": null, "hyperfine": {"mean": 0.6132, "stddev": 0.0472, "min": 0.554, "max": 0.6506, "median": 0.6445}}, "python": {"ok": true, "codigo_salida": 0, "memoria_mb": 13.9, "tiempo_s": 0.08, "error": null, "hyperfine": {"mean": 0.0814, "stddev": 0.0061, "min": 0.0763, "max": 0.0904, "median": 0.0777}}}, "equivalencia": {"identicas": true, "lineas_diferentes": 0, "total_lineas": 1869, "primera_diferencia": null}}, {"n": 1000, "lenguajes": {"scala": {"ok": true, "codigo_salida": 0, "memoria_mb": 172.8, "tiempo_s": 0.94, "error": null, "hyperfine": {"mean": 0.8993, "stddev": 0.0255, "min": 0.8791, "max": 0.9415, "median": 0.8863}}, "python": {"ok": true, "codigo_salida": 0, "memoria_mb": 18.1, "tiempo_s": 0.24, "error": null, "hyperfine": {"mean": 0.2354, "stddev": 0.0067, "min": 0.2298, "max": 0.2439, "median": 0.2311}}}, "equivalencia": {"identicas": true, "lineas_diferentes": 0, "total_lineas": 11489, "primera_diferencia": null}}, {"n": 5000, "lenguajes": {"scala": {"ok": true, "codigo_salida": 0, "memoria_mb": 433.1, "tiempo_s": 1.5, "error": null, "hyperfine": {"mean": 1.6386, "stddev": 0.0375, "min": 1.5877, "max": 1.6857, "median": 1.6461}}, "python": {"ok": true, "codigo_salida": 0, "memoria_mb": 112.3, "tiempo_s": 1.64, "error": null, "hyperfine": {"mean": 1.5239, "stddev": 0.0144, "min": 1.5059, "max": 1.5364, "median": 1.5313}}}, "equivalencia": {"identicas": true, "lineas_diferentes": 0, "total_lineas": 54649, "primera_diferencia": null}}]}, "garantias": {"estado": "ok", "mutaciones": {"scala": [{"id": "reasignar", "nombre": "Reasignar un valor inmutable", "descripcion": "Se declara un valor y luego se le asigna otro (en Scala `val`, en Python una variable).", "codigo": "def __reasignar(): Int =\n  val total = 1\n  total = 2\n  total", "estado": "compilacion", "mensaje": "Reassignment to val total"}, {"id": "mutar", "nombre": "Modificar un registro inmutable", "descripcion": "Se cambia un campo de una solicitud ya creada (case class / frozen dataclass).", "codigo": "def __mutar(r: Solicitud): Unit =\n  r.horas = r.horas * 2", "estado": "compilacion", "mensaje": "Reassignment to val horas"}, {"id": "tipo", "nombre": "Tipo incorrecto en un campo", "descripcion": "Las horas se guardan como texto en lugar de número al construir la solicitud.", "codigo": "horas     = (pedir(\"  Horas dedicadas: \", Validacion.numeroNoNegativo(\"Horas\"))).toString,", "estado": "compilacion", "mensaje": "Tipo incorrecto · Found: String · Required: Double"}, {"id": "errata", "nombre": "Error de tipeo en un campo", "descripcion": "Se accede a un campo que no existe (por ejemplo `horass`).", "codigo": "def __errata(r: Solicitud): Double =\n  r.horass * 2", "estado": "compilacion", "mensaje": "value horass is not a member of soporte360.Solicitud - did you mean r.horas?"}, {"id": "match", "nombre": "Caso faltante en un match", "descripcion": "Un `match` sobre un enum solo maneja uno de sus casos.", "codigo": "def __describir(e: Categoria): String = e match\n  case Categoria.Hardware => \"Hardware\"", "estado": "advertencia", "mensaje": "match may not be exhaustive."}], "python": [{"id": "reasignar", "nombre": "Reasignar un valor inmutable", "descripcion": "Se declara un valor y luego se le asigna otro (en Scala `val`, en Python una variable).", "codigo": "def __reasignar():\n    total = 1\n    total = 2\n    return total", "estado": "no_detectado", "mensaje": "Se ejecutó normalmente; el lenguaje lo permitió sin aviso"}, {"id": "mutar", "nombre": "Modificar un registro inmutable", "descripcion": "Se cambia un campo de una solicitud ya creada (case class / frozen dataclass).", "codigo": "self.horas = self.horas * 2", "estado": "ejecucion", "mensaje": "dataclasses.FrozenInstanceError: cannot assign to field 'horas'"}, {"id": "tipo", "nombre": "Tipo incorrecto en un campo", "descripcion": "Las horas se guardan como texto en lugar de número al construir la solicitud.", "codigo": "horas=str(pedir(\"  Horas dedicadas: \", numero_no_negativo(\"Horas\")))", "estado": "ejecucion", "mensaje": "ValueError: Unknown format code 'f' for object of type 'str'"}, {"id": "errata", "nombre": "Error de tipeo en un campo", "descripcion": "Se accede a un campo que no existe (por ejemplo `horass`).", "codigo": "_ = self.horass * 2", "estado": "ejecucion", "mensaje": "AttributeError: 'Solicitud' object has no attribute 'horass'. Did you mean: 'horas'?"}, {"id": "match", "nombre": "Caso faltante en un match", "descripcion": "Un `match` sobre un enum solo maneja uno de sus casos.", "codigo": "def __describir(e):\n    match e:\n        case Categoria.HARDWARE:\n            return \"HARDWARE\"", "estado": "no_detectado", "mensaje": "Se ejecutó normalmente; el lenguaje lo permitió sin aviso"}]}, "recursion": [{"n": 5000, "lenguajes": {"scala": {"ok": true, "codigo_salida": 0, "memoria_mb": 421.4, "tiempo_s": 1.58, "error": null}, "python": {"ok": true, "codigo_salida": 0, "memoria_mb": 112.3, "tiempo_s": 1.59, "error": null}}}, {"n": 10000, "lenguajes": {"scala": {"ok": true, "codigo_salida": 0, "memoria_mb": 453.1, "tiempo_s": 2.53, "error": null}, "python": {"ok": false, "codigo_salida": 1, "memoria_mb": 406.6, "tiempo_s": 5.18, "error": "RecursionError: maximum recursion depth exceeded"}}}, {"n": 20000, "lenguajes": {"scala": {"ok": true, "codigo_salida": 0, "memoria_mb": 817.5, "tiempo_s": 6.21, "error": null}, "python": {"ok": false, "error": "omitido: ya falló con una entrada menor"}}}], "resumen": {"scala": {"detectados_antes": 5, "aplicables": 5, "pct_antes": 100.0, "no_detectados": 0, "max_recursion": 20000}, "python": {"detectados_antes": 0, "aplicables": 5, "pct_antes": 0.0, "no_detectados": 2, "max_recursion": 5000}}}, "puntaje": {"criterios": {"mantenibilidad": {"nombre": "Mantenibilidad", "tipo": "medido", "descripcion": "Deuda técnica y code smells por cada 1.000 líneas (SonarQube).", "puntajes": {"scala": 10.0, "python": 10.0}, "submetricas": [{"descripcion": "Minutos de deuda técnica por kLOC", "valores": {"scala": 0.0, "python": 0.0}, "menor_es_mejor": true, "puntajes": {"scala": 10.0, "python": 10.0}}, {"descripcion": "Code smells por kLOC", "valores": {"scala": 0.0, "python": 0.0}, "menor_es_mejor": true, "puntajes": {"scala": 10.0, "python": 10.0}}]}, "confiabilidad": {"nombre": "Confiabilidad", "tipo": "medido", "descripcion": "Bugs detectados por SonarQube y ejecuciones fallidas en las pruebas.", "puntajes": {"scala": 10.0, "python": 10.0}, "submetricas": [{"descripcion": "Bugs (Sonar) + ejecuciones fallidas", "valores": {"scala": 0.0, "python": 0.0}, "menor_es_mejor": true, "puntajes": {"scala": 10.0, "python": 10.0}}]}, "seguridad": {"nombre": "Seguridad", "tipo": "medido", "descripcion": "Vulnerabilidades y security hotspots (SonarQube).", "puntajes": {"scala": 10.0, "python": 10.0}, "submetricas": [{"descripcion": "Vulnerabilidades ×3 + hotspots", "valores": {"scala": 0.0, "python": 0.0}, "menor_es_mejor": true, "puntajes": {"scala": 10.0, "python": 10.0}}]}, "legibilidad": {"nombre": "Legibilidad", "tipo": "medido", "descripcion": "Complejidad cognitiva por función (SonarQube) y ciclomática promedio (lizard).", "puntajes": {"scala": 10.0, "python": 6.89}, "submetricas": [{"descripcion": "Complejidad cognitiva por función (Sonar)", "valores": {"scala": 0.4, "python": 0.65}, "menor_es_mejor": true, "puntajes": {"scala": 10.0, "python": 6.34}}, {"descripcion": "Complejidad ciclomática promedio (lizard)", "valores": {"scala": 1.15, "python": 1.57}, "menor_es_mejor": true, "puntajes": {"scala": 10.0, "python": 7.45}}]}, "concision": {"nombre": "Concisión", "tipo": "medido", "descripcion": "Líneas de código efectivas para resolver el mismo problema.", "puntajes": {"scala": 8.71, "python": 10.0}, "submetricas": [{"descripcion": "Líneas de código (Sonar ncloc)", "valores": {"scala": 377.0, "python": 326.0}, "menor_es_mejor": true, "puntajes": {"scala": 8.71, "python": 10.0}}]}, "pureza_funcional": {"nombre": "Pureza funcional", "tipo": "medido", "descripcion": "Violaciones a las reglas de la práctica (for, while, var, mutación…) por cada 100 líneas.", "puntajes": {"scala": 10.0, "python": 9.88}, "submetricas": [{"descripcion": "Violaciones a las reglas por 100 líneas", "valores": {"scala": 0.0, "python": 0.0}, "menor_es_mejor": true, "puntajes": {"scala": 10.0, "python": 10.0}}, {"descripcion": "Densidad funcional (lambdas + orden superior por 100 líneas)", "valores": {"scala": 35.81, "python": 34.86}, "menor_es_mejor": false, "puntajes": {"scala": 10.0, "python": 9.75}}]}, "garantias_funcionales": {"nombre": "Garantías funcionales", "tipo": "medido", "descripcion": "Experimentos: % de errores inyectados (reasignar, mutar, tipo, errata, match incompleto) detectados antes de ejecutar, y tamaño máximo que soporta la recursión sin desbordar la pila.", "puntajes": {"scala": 10.0, "python": 1.67}, "submetricas": [{"descripcion": "Errores inyectados detectados antes de ejecutar (%)", "valores": {"scala": 100.0, "python": 0.0}, "menor_es_mejor": false, "puntajes": {"scala": 10.0, "python": 0.48}}, {"descripcion": "Máximo de solicitudes procesadas con recursión", "valores": {"scala": 20000, "python": 5000}, "menor_es_mejor": false, "puntajes": {"scala": 10.0, "python": 2.86}}]}, "arranque_rapido": {"nombre": "Arranque rápido", "tipo": "medido", "descripcion": "Tiempo total de ejecución con la entrada más pequeña.", "puntajes": {"scala": 1.57, "python": 10.0}, "submetricas": [{"descripcion": "Tiempo con 10 solicitudes (s)", "valores": {"scala": 0.5452, "python": 0.0625}, "menor_es_mejor": true, "puntajes": {"scala": 1.57, "python": 10.0}}]}, "rendimiento_volumen": {"nombre": "Rendimiento con volumen", "tipo": "medido", "descripcion": "Tiempo con la entrada más grande que ambos lograron procesar; 0 si un lenguaje falló.", "puntajes": {"scala": 9.33, "python": 10.0}, "submetricas": [{"descripcion": "Tiempo con 5000 solicitudes (s)", "valores": {"scala": 1.6386, "python": 1.5239}, "menor_es_mejor": true, "puntajes": {"scala": 9.33, "python": 10.0}}]}, "memoria": {"nombre": "Uso de memoria", "tipo": "medido", "descripcion": "Memoria máxima (RSS) con la entrada más grande.", "puntajes": {"scala": 2.95, "python": 10.0}, "submetricas": [{"descripcion": "Memoria máxima con 5000 solicitudes (MB)", "valores": {"scala": 433.1, "python": 112.3}, "menor_es_mejor": true, "puntajes": {"scala": 2.95, "python": 10.0}}]}, "ciclo_desarrollo": {"nombre": "Ciclo de desarrollo", "tipo": "medido", "descripcion": "Tiempo de compilación/preparación antes de poder ejecutar.", "puntajes": {"scala": 0.54, "python": 10.0}, "submetricas": [{"descripcion": "Tiempo de compilación/preparación (s)", "valores": {"scala": 14.17, "python": 0.1}, "menor_es_mejor": true, "puntajes": {"scala": 0.54, "python": 10.0}}]}, "seguridad_tipos": {"nombre": "Seguridad de tipos", "tipo": "cualitativo", "descripcion": "Errores detectados antes de ejecutar.", "valores": {"scala": 9, "python": 4}, "justificacion": "Scala tiene tipado estático verificado por el compilador; en Python las anotaciones no se verifican al ejecutar.", "puntajes": {"scala": 9.0, "python": 4.0}, "submetricas": []}, "facilidad_aprendizaje": {"nombre": "Facilidad de aprendizaje", "tipo": "cualitativo", "descripcion": "Curva de aprendizaje para alguien nuevo.", "valores": {"scala": 4, "python": 9}, "justificacion": "Python tiene sintaxis mínima y es el lenguaje de enseñanza más usado; Scala combina POO, FP y un sistema de tipos avanzado.", "puntajes": {"scala": 4.0, "python": 9.0}, "submetricas": []}, "ecosistema": {"nombre": "Ecosistema y comunidad", "tipo": "cualitativo", "descripcion": "Librerías, comunidad y oferta laboral.", "valores": {"scala": 6, "python": 10}, "justificacion": "Python domina en datos, IA y automatización; Scala es fuerte en big data (Spark) y backend en la JVM, con una comunidad más pequeña.", "puntajes": {"scala": 6.0, "python": 10.0}, "submetricas": []}}, "escenarios": [{"id": "empresarial", "nombre": "Sistema empresarial a largo plazo", "icono": "🏢", "descripcion": "Aplicación que crecerá durante años, con varios desarrolladores y cambios frecuentes.", "pesos": {"mantenibilidad": 5, "confiabilidad": 5, "seguridad_tipos": 5, "legibilidad": 4, "seguridad": 4, "pureza_funcional": 2, "rendimiento_volumen": 3, "ecosistema": 2, "garantias_funcionales": 5}, "omitidos": [], "totales": {"scala": 9.57, "python": 7.59}, "ganador": "scala", "margen": 1.98, "a_favor": [{"criterio": "garantias_funcionales", "nombre": "Garantías funcionales", "peso": 5, "diferencia": 8.33, "impacto": 1.19}, {"criterio": "seguridad_tipos", "nombre": "Seguridad de tipos", "peso": 5, "diferencia": 5.0, "impacto": 0.71}, {"criterio": "legibilidad", "nombre": "Legibilidad", "peso": 4, "diferencia": 3.11, "impacto": 0.36}], "en_contra": [{"criterio": "ecosistema", "nombre": "Ecosistema y comunidad", "peso": 2, "diferencia": -4.0, "impacto": -0.23}, {"criterio": "rendimiento_volumen", "nombre": "Rendimiento con volumen", "peso": 3, "diferencia": -0.67, "impacto": -0.06}]}, {"id": "prototipo", "nombre": "Prototipo rápido / MVP", "icono": "🚀", "descripcion": "Validar una idea en pocos días; importa más la velocidad de desarrollo que la robustez.", "pesos": {"concision": 5, "ciclo_desarrollo": 5, "facilidad_aprendizaje": 4, "arranque_rapido": 3, "ecosistema": 3, "legibilidad": 2}, "omitidos": [], "totales": {"scala": 4.77, "python": 9.54}, "ganador": "python", "margen": 4.77, "a_favor": [{"criterio": "ciclo_desarrollo", "nombre": "Ciclo de desarrollo", "peso": 5, "diferencia": 9.46, "impacto": 2.15}, {"criterio": "arranque_rapido", "nombre": "Arranque rápido", "peso": 3, "diferencia": 8.43, "impacto": 1.15}, {"criterio": "facilidad_aprendizaje", "nombre": "Facilidad de aprendizaje", "peso": 4, "diferencia": 5.0, "impacto": 0.91}], "en_contra": [{"criterio": "legibilidad", "nombre": "Legibilidad", "peso": 2, "diferencia": -3.11, "impacto": -0.28}]}, {"id": "volumen", "nombre": "Procesamiento de gran volumen", "icono": "📈", "descripcion": "Miles o millones de solicitudes; el tiempo de cómputo y la memoria son críticos.", "pesos": {"rendimiento_volumen": 5, "memoria": 3, "confiabilidad": 4, "pureza_funcional": 2, "seguridad_tipos": 3, "garantias_funcionales": 3}, "omitidos": [], "totales": {"scala": 8.62, "python": 7.84}, "ganador": "scala", "margen": 0.78, "a_favor": [{"criterio": "garantias_funcionales", "nombre": "Garantías funcionales", "peso": 3, "diferencia": 8.33, "impacto": 1.25}, {"criterio": "seguridad_tipos", "nombre": "Seguridad de tipos", "peso": 3, "diferencia": 5.0, "impacto": 0.75}, {"criterio": "pureza_funcional", "nombre": "Pureza funcional", "peso": 2, "diferencia": 0.12, "impacto": 0.01}], "en_contra": [{"criterio": "memoria", "nombre": "Uso de memoria", "peso": 3, "diferencia": -7.05, "impacto": -1.06}, {"criterio": "rendimiento_volumen", "nombre": "Rendimiento con volumen", "peso": 5, "diferencia": -0.67, "impacto": -0.17}]}, {"id": "junior", "nombre": "Equipo junior / académico", "icono": "🎓", "descripcion": "Desarrolladores con poca experiencia que deben entender y modificar el código.", "pesos": {"facilidad_aprendizaje": 5, "legibilidad": 5, "concision": 3, "ciclo_desarrollo": 3, "mantenibilidad": 2, "garantias_funcionales": 2}, "omitidos": [], "totales": {"scala": 6.89, "python": 8.14}, "ganador": "python", "margen": 1.25, "a_favor": [{"criterio": "ciclo_desarrollo", "nombre": "Ciclo de desarrollo", "peso": 3, "diferencia": 9.46, "impacto": 1.42}, {"criterio": "facilidad_aprendizaje", "nombre": "Facilidad de aprendizaje", "peso": 5, "diferencia": 5.0, "impacto": 1.25}, {"criterio": "concision", "nombre": "Concisión", "peso": 3, "diferencia": 1.29, "impacto": 0.19}], "en_contra": [{"criterio": "garantias_funcionales", "nombre": "Garantías funcionales", "peso": 2, "diferencia": -8.33, "impacto": -0.83}, {"criterio": "legibilidad", "nombre": "Legibilidad", "peso": 5, "diferencia": -3.11, "impacto": -0.78}]}, {"id": "funcional", "nombre": "Paradigma funcional estricto", "icono": "λ", "descripcion": "Lo que exige esta práctica: inmutabilidad, sin ciclos imperativos, funciones puras.", "pesos": {"pureza_funcional": 5, "seguridad_tipos": 4, "legibilidad": 3, "confiabilidad": 3, "concision": 2, "garantias_funcionales": 5}, "omitidos": [], "totales": {"scala": 9.7, "python": 6.56}, "ganador": "scala", "margen": 3.14, "a_favor": [{"criterio": "garantias_funcionales", "nombre": "Garantías funcionales", "peso": 5, "diferencia": 8.33, "impacto": 1.89}, {"criterio": "seguridad_tipos", "nombre": "Seguridad de tipos", "peso": 4, "diferencia": 5.0, "impacto": 0.91}, {"criterio": "legibilidad", "nombre": "Legibilidad", "peso": 3, "diferencia": 3.11, "impacto": 0.42}], "en_contra": [{"criterio": "concision", "nombre": "Concisión", "peso": 2, "diferencia": -1.29, "impacto": -0.12}]}, {"id": "script", "nombre": "Script o automatización ocasional", "icono": "⚙️", "descripcion": "Herramienta que se ejecuta de vez en cuando con pocos datos.", "pesos": {"arranque_rapido": 5, "ciclo_desarrollo": 5, "concision": 4, "memoria": 3, "facilidad_aprendizaje": 3}, "omitidos": [], "totales": {"scala": 3.31, "python": 9.85}, "ganador": "python", "margen": 6.54, "a_favor": [{"criterio": "ciclo_desarrollo", "nombre": "Ciclo de desarrollo", "peso": 5, "diferencia": 9.46, "impacto": 2.37}, {"criterio": "arranque_rapido", "nombre": "Arranque rápido", "peso": 5, "diferencia": 8.43, "impacto": 2.11}, {"criterio": "memoria", "nombre": "Uso de memoria", "peso": 3, "diferencia": 7.05, "impacto": 1.06}], "en_contra": []}], "victorias": {"scala": 3, "python": 3}, "empates": 0}, "comparacion_anterior": {"fecha_anterior": "2026-11-02T21:53:45", "huellas_anteriores": {"scala": "14253037ec4b", "python": "bd5aebe00ef0"}, "cambios": [{"lenguaje": "scala", "indicador": "Líneas de código", "antes": 376.0, "ahora": 377.0}, {"lenguaje": "scala", "indicador": "Tiempo 5000 solicitudes (s)", "antes": 0.8444, "ahora": 1.6386}, {"lenguaje": "scala", "indicador": "Puntaje · Sistema empresarial a largo plazo", "antes": 9.63, "ahora": 9.57}, {"lenguaje": "scala", "indicador": "Puntaje · Prototipo rápido / MVP", "antes": 4.8, "ahora": 4.77}, {"lenguaje": "scala", "indicador": "Puntaje · Procesamiento de gran volumen", "antes": 8.8, "ahora": 8.62}, {"lenguaje": "scala", "indicador": "Puntaje · Script o automatización ocasional", "antes": 3.38, "ahora": 3.31}, {"lenguaje": "python", "indicador": "Líneas de código", "antes": 325.0, "ahora": 326.0}, {"lenguaje": "python", "indicador": "Tiempo 5000 solicitudes (s)", "antes": 0.9591, "ahora": 1.5239}, {"lenguaje": "python", "indicador": "Puntaje · Sistema empresarial a largo plazo", "antes": 7.49, "ahora": 7.59}, {"lenguaje": "python", "indicador": "Puntaje · Procesamiento de gran volumen", "antes": 7.55, "ahora": 7.84}]}};
+const IDS = Object.keys(D.lenguajes);
+const NOM = id => D.lenguajes[id].nombre;
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const COL = id => css('--' + id);
+const fmt = (v, d = 2) => v == null || Number.isNaN(v) ? '—' : Number(v).toLocaleString('es-CO', {maximumFractionDigits: d, minimumFractionDigits: 0});
+const tag = id => id ? `<span class="tag t-${id}">${NOM(id)}</span>` : '<span class="tag t-tie">Empate</span>';
+const $ = id => document.getElementById(id);
+const P = D.puntaje, charts = [];
+Chart.defaults.animation = false;
+Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+
+function bars(tot) {
+  return IDS.map(i => `<div class="score-row"><span class="lbl">${NOM(i)}</span><span class="bar"><i style="width:${tot[i] * 10}%;background:${COL(i)}"></i></span><b>${fmt(tot[i])}</b></div>`).join('');
+}
+
+// ---------- Encabezado y veredicto ----------
+$('meta').innerHTML = `Generado ${new Date(D.fecha).toLocaleString('es-CO')}<br>` +
+  IDS.map(i => `${NOM(i)}: ${D.lenguajes[i].archivos.length} archivos · huella <code>${D.lenguajes[i].huella}</code>`).join('<br>');
+
+(function hero() {
+  const v = P.victorias, ord = [...IDS].sort((a, b) => v[b] - v[a]);
+  const lider = v[ord[0]] > v[ord[1]] ? ord[0] : null;
+  const fun = P.escenarios.find(e => e.id === 'funcional');
+  $('hero-main').innerHTML = `
+    <span class="note">Veredicto global</span>
+    <div class="verdict-big">${lider ? `${NOM(lider)} gana ${v[lider]} de ${P.escenarios.length} escenarios` : 'Resultado dividido entre escenarios'}</div>
+    <p class="note" style="margin:0 0 12px">${IDS.map(i => `${NOM(i)}: ${v[i]} victorias`).join(' · ')}${P.empates ? ` · ${P.empates} empates` : ''}. No existe un "mejor lenguaje" absoluto: depende del contexto.</p>
+    ${fun ? `<div class="card" style="background:var(--soft);border:0;box-shadow:none"><h3>Para esta práctica (paradigma funcional estricto): ${tag(fun.ganador)}</h3>${bars(fun.totales)}
+      <ul class="why">${fun.a_favor.map(a => `<li><b>${a.nombre}</b> · ventaja de ${fmt(a.diferencia)} pts (peso ${a.peso})</li>`).join('')}</ul>
+      ${D.garantias && D.garantias.estado === 'ok' ? `<p class="note" style="margin:10px 0 0">Errores atrapados antes de ejecutar: ${IDS.map(i => `<b>${NOM(i)} ${D.garantias.resumen[i].detectados_antes}/${D.garantias.resumen[i].aplicables}</b>`).join(' · ')}. Recursión máxima: ${IDS.map(i => `<b>${NOM(i)} ${fmt(D.garantias.resumen[i].max_recursion, 0)}</b>`).join(' · ')}. <a href="#garantias">Ver experimentos ↓</a></p>` : ''}</div>` : ''}`;
+})();
+
+charts.push(new Chart($('c-esc'), {
+  type: 'bar',
+  data: {labels: P.escenarios.map(e => e.nombre), datasets: IDS.map(i => ({label: NOM(i), data: P.escenarios.map(e => e.totales[i]), backgroundColor: COL(i), borderRadius: 4, maxBarThickness: 16}))},
+  options: {indexAxis: 'y', maintainAspectRatio: false, scales: {x: {min: 0, max: 10, grid: {color: css('--line')}, ticks: {color: css('--muted')}}, y: {grid: {display: false}, ticks: {color: css('--ink'), font: {size: 11}}}},
+    plugins: {legend: {labels: {color: css('--ink'), boxWidth: 10}}}}
+}));
+
+
+// ---------- Garantías funcionales ----------
+(function garantias() {
+  const G = D.garantias;
+  if (!G || G.estado !== 'ok') { $('garantias-body').innerHTML = '<div class="empty">Experimentos omitidos en esta ejecución (--sin-garantias).</div>'; return; }
+  const R = G.resumen;
+  const EST = {
+    compilacion: ['t-ok', '✔ Detectado al compilar'], advertencia: ['t-ok', '✔ Advertencia del compilador'],
+    ejecucion: ['t-warn', '⚠ Solo falla al ejecutar'], silencioso: ['t-bad', '✖ Resultado incorrecto sin aviso'],
+    no_detectado: ['t-bad', '✖ No detectado'], no_aplica: ['t-tie', '— No aplicable'],
+  };
+  const filas = G.mutaciones[IDS[0]].map((m, k) => ({m, celdas: IDS.map(i => G.mutaciones[i][k])}));
+  const maxN = Math.max(...G.recursion.map(f => f.n));
+  $('garantias-body').innerHTML = `
+    <div class="grid g4" style="margin-bottom:14px">
+      ${IDS.map(i => `<div class="card kpi"><div class="l">${NOM(i)} · errores atrapados antes de ejecutar</div>
+        <div class="big" style="color:${R[i].pct_antes >= 50 ? 'var(--ok)' : 'var(--bad)'}">${R[i].detectados_antes}/${R[i].aplicables}</div>
+        <div class="note">${fmt(R[i].pct_antes, 0)} % · ${R[i].no_detectados} nunca detectados</div></div>`).join('')}
+      ${IDS.map(i => `<div class="card kpi"><div class="l">${NOM(i)} · recursión máxima soportada</div>
+        <div class="big" style="color:${R[i].max_recursion >= maxN ? 'var(--ok)' : 'var(--bad)'}">${fmt(R[i].max_recursion, 0)}</div>
+        <div class="note">${R[i].max_recursion >= maxN ? 'superó todas las pruebas' : 'último tamaño que terminó; con el siguiente desbordó la pila'}</div></div>`).join('')}
+    </div>
+    <div class="card tbl"><h3>Experimento A · Errores inyectados</h3>
+      <p class="note" style="margin-top:0">Se introduce cada error en una copia del proyecto y se observa cuándo lo detecta el lenguaje. Lo ideal en programación funcional es detectarlo <b>antes de ejecutar</b>.</p>
+      <table><thead><tr><th>Error introducido</th>${IDS.map(i => `<th>${NOM(i)}</th>`).join('')}</tr></thead><tbody>${
+        filas.map(({m, celdas}) => `<tr><td><b>${m.nombre}</b><div class="note">${m.descripcion}</div></td>${celdas.map(c => {
+          const [cls, txt] = EST[c.estado] || ['t-tie', c.estado];
+          return `<td><div class="gar-cell"><span class="tag ${cls}" style="align-self:flex-start">${txt}</span><span class="note mono">${c.mensaje || ''}</span>${c.codigo ? `<details><summary>Código inyectado</summary><pre class="inj">${c.codigo.replace(/</g, '&lt;')}</pre></details>` : ''}</div></td>`;
+        }).join('')}</tr>`).join('')}</tbody></table></div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><h3>Experimento B · Recursión bajo estrés</h3><div class="chart sm"><canvas id="c-rec"></canvas></div>
+        <p class="note">Sin ciclos, todo se repite con recursión. Scala usa <code>@tailrec</code> (el compilador la convierte en un ciclo y no consume pila); Python no optimiza la recursión de cola y tiene un límite de profundidad.</p></div>
+      <div class="card tbl"><h3>Detalle de la prueba de estrés</h3><table><thead><tr><th class="n">Solicitudes</th>${IDS.map(i => `<th>${NOM(i)}</th>`).join('')}</tr></thead><tbody>${
+        G.recursion.map(f => `<tr><td class="n">${fmt(f.n, 0)}</td>${IDS.map(i => { const d = f.lenguajes[i];
+          return `<td>${d.ok ? `<span class="tag t-ok">✔ ${fmt(d.tiempo_s, 2)} s</span>` : `<span class="tag t-bad">✖ falló</span><div class="note mono">${d.error || ''}</div>`}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>
+    </div>`;
+  charts.push(new Chart($('c-rec'), {type: 'bar',
+    data: {labels: G.recursion.map(f => fmt(f.n, 0) + ' solicitudes'), datasets: IDS.map(i => ({label: NOM(i), data: G.recursion.map(f => f.lenguajes[i].ok ? 1 : 0), backgroundColor: COL(i), borderRadius: 4}))},
+    options: {maintainAspectRatio: false, scales: {y: {min: 0, max: 1, ticks: {stepSize: 1, color: css('--muted'), callback: v => v ? '✔ terminó' : '✖ falló'}, grid: {color: css('--line')}}, x: {grid: {display: false}, ticks: {color: css('--ink')}}},
+      plugins: {legend: {labels: {color: css('--ink'), boxWidth: 10}}, tooltip: {callbacks: {label: c => `${c.dataset.label}: ${c.raw ? 'terminó' : 'falló'}`}}}}}));
+})();
+
+// ---------- Escenarios ----------
+$('esc-cards').innerHTML = P.escenarios.map(e => `
+  <div class="card esc">
+    <h3><span class="ico">${e.icono}</span>${e.nombre}</h3>
+    <p class="desc">${e.descripcion}</p>
+    <div style="margin-bottom:6px">${tag(e.ganador)} <span class="note">margen ${fmt(e.margen)}</span></div>
+    ${bars(e.totales)}
+    <ul class="why">
+      ${e.a_favor.map(a => `<li>✔ <b>${a.nombre}</b> (+${fmt(a.diferencia)}, peso ${a.peso})</li>`).join('')}
+      ${e.en_contra.map(a => `<li>✖ <b>${a.nombre}</b> favorece al otro (${fmt(a.diferencia)})</li>`).join('')}
+      ${e.omitidos.length ? `<li>Sin datos: ${e.omitidos.join(', ')}</li>` : ''}
+    </ul>
+  </div>`).join('');
+
+// ---------- Criterios ----------
+const CR = P.criterios, CIDS = Object.keys(CR);
+$('sel-radar').innerHTML = '<option value="">Todos los criterios</option>' + P.escenarios.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
+let radar;
+function dibujarRadar() {
+  const esc = P.escenarios.find(e => e.id === $('sel-radar').value);
+  const ids = esc ? Object.keys(esc.pesos) : CIDS;
+  radar && radar.destroy();
+  radar = new Chart($('c-radar'), {
+    type: 'radar',
+    data: {labels: ids.map(c => CR[c].nombre + (CR[c].tipo === 'cualitativo' ? ' *' : '')),
+      datasets: IDS.map(i => ({label: NOM(i), data: ids.map(c => CR[c].puntajes[i]), borderColor: COL(i), backgroundColor: COL(i) + '33', pointBackgroundColor: COL(i), borderWidth: 2}))},
+    options: {maintainAspectRatio: false, scales: {r: {min: 0, max: 10, ticks: {stepSize: 2, color: css('--muted'), backdropColor: 'transparent'}, grid: {color: css('--line')}, angleLines: {color: css('--line')}, pointLabels: {color: css('--ink'), font: {size: 11}}}},
+      plugins: {legend: {labels: {color: css('--ink'), boxWidth: 10}}}}
+  });
+}
+$('sel-radar').onchange = dibujarRadar; dibujarRadar();
+
+$('tabla-criterios').innerHTML = `<table><thead><tr><th>Criterio</th>${IDS.map(i => `<th class="n">${NOM(i)}</th>`).join('')}</tr></thead><tbody>${
+  CIDS.map(c => {
+    const p = CR[c].puntajes, best = Math.max(...IDS.map(i => p[i]));
+    const sub = CR[c].tipo === 'cualitativo' ? `<div class="note">* Cualitativo: ${CR[c].justificacion}</div>` :
+      CR[c].submetricas.map(s => `<div class="note">${s.descripcion}: ${IDS.map(i => `${NOM(i)} ${fmt(s.valores[i])}`).join(' · ')}</div>`).join('');
+    return `<tr><td><b>${CR[c].nombre}</b>${sub}</td>${IDS.map(i => `<td class="n ${p[i] === best ? 'win' : ''}">${fmt(p[i])}</td>`).join('')}</tr>`;
+  }).join('')}</tbody></table>`;
+
+// ---------- SonarQube ----------
+(function sonar() {
+  const S = D.sonar;
+  if (S.estado !== 'ok') {
+    $('sonar-sub').textContent = 'No disponible en esta ejecución.';
+    $('sonar-body').innerHTML = `<div class="empty">SonarQube no se ejecutó: ${S.motivo}. Define <code>SONAR_TOKEN</code> y vuelve a correr <code>./analizar.sh</code>.</div>`;
+    return;
+  }
+  $('sonar-sub').innerHTML = `Analizado en SonarQube Cloud con los perfiles “Sonar way”. <a href="${S.url}" target="_blank" rel="noopener">Abrir tablero en SonarQube ↗</a>`;
+  const L = S.lenguajes;
+  const filas = [
+    ['Calificación mantenibilidad', 'nota_mantenibilidad', 'nota'], ['Calificación confiabilidad', 'nota_confiabilidad', 'nota'], ['Calificación seguridad', 'nota_seguridad', 'nota'],
+    ['Líneas de código', 'ncloc', 'min'], ['Funciones', 'functions'], ['Complejidad ciclomática', 'complexity', 'min'], ['Complejidad cognitiva', 'cognitive_complexity', 'min'],
+    ['Cognitiva por función', 'complejidad_cognitiva_por_funcion', 'min'], ['Bugs', 'bugs', 'min'], ['Vulnerabilidades', 'vulnerabilities', 'min'], ['Security hotspots', 'hotspots', 'min'],
+    ['Code smells', 'code_smells', 'min'], ['Deuda técnica (min)', 'sqale_index', 'min'], ['Ratio de deuda (%)', 'deuda_ratio', 'min'], ['Duplicación (%)', 'duplicacion_pct', 'min'], ['Comentarios (%)', 'comentarios_pct']];
+  const celda = (k, modo, i) => {
+    const v = L[i][k];
+    if (modo === 'nota') return `<span class="tag ${v === 'A' ? 't-ok' : v <= 'C' ? 't-warn' : 't-bad'}">${v}</span>`;
+    const otros = IDS.map(j => L[j][k]); const win = modo === 'min' && v === Math.min(...otros) && new Set(otros).size > 1;
+    return `<span class="${win ? 'win' : ''}">${fmt(v)}</span>`;
+  };
+  const issues = IDS.flatMap(i => L[i].issues.map(x => ({...x, lang: i})));
+  $('sonar-body').innerHTML = `<div class="grid g2">
+    <div class="card tbl"><table><thead><tr><th>Métrica</th>${IDS.map(i => `<th class="n">${NOM(i)}</th>`).join('')}</tr></thead>
+      <tbody>${filas.map(([n, k, m]) => `<tr><td>${n}</td>${IDS.map(i => `<td class="n">${celda(k, m, i)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+    <div class="card"><h3>Complejidad cognitiva por archivo</h3><div class="chart"><canvas id="c-sonar-arch"></canvas></div></div>
+  </div>
+  <div class="card tbl" style="margin-top:14px"><h3>Issues abiertos (${issues.length})</h3>${issues.length ? `<table><thead><tr><th>Lenguaje</th><th>Tipo</th><th>Severidad</th><th>Archivo</th><th>Mensaje</th></tr></thead><tbody>${
+    issues.map(x => `<tr><td>${tag(x.lang)}</td><td>${x.type}</td><td>${x.severity}</td><td class="mono">${x.archivo}:${x.line ?? ''}</td><td>${x.message}</td></tr>`).join('')}</tbody></table>` : '<div class="empty">Sin issues: ningún bug, vulnerabilidad ni code smell en ambos lenguajes.</div>'}</div>`;
+  const arch = IDS.flatMap(i => L[i].por_archivo.map(a => ({lang: i, nombre: a.archivo.split('/').pop(), v: a.cognitive_complexity || 0}))).sort((a, b) => b.v - a.v);
+  charts.push(new Chart($('c-sonar-arch'), {type: 'bar',
+    data: {labels: arch.map(a => a.nombre), datasets: [{label: 'Complejidad cognitiva', data: arch.map(a => a.v), backgroundColor: arch.map(a => COL(a.lang)), borderRadius: 4}]},
+    options: {indexAxis: 'y', maintainAspectRatio: false, plugins: {legend: {display: false}}, scales: {x: {grid: {color: css('--line')}, ticks: {color: css('--muted')}}, y: {grid: {display: false}, ticks: {color: css('--ink'), font: {size: 11}}}}}}));
+})();
+
+// ---------- Complejidad ----------
+(function comp() {
+  const E = D.estatico;
+  const k = [['Funciones', 'funciones', 0], ['CCN promedio', 'ccn_promedio', 2], ['CCN máximo', 'ccn_maximo', 0], ['Líneas por función', 'nloc_promedio_funcion', 2]];
+  $('kpi-comp').innerHTML = k.map(([l, key, d]) => `<div class="card kpi"><div class="l">${l}</div><div class="vs">${IDS.map(i => `<div><div class="v" style="color:${COL(i)}">${fmt(E[i].complejidad[key], d)}</div><span>${NOM(i)}</span></div>`).join('')}</div></div>`).join('');
+  IDS.forEach(i => {
+    const top = E[i].complejidad.detalle.slice(0, 12);
+    charts.push(new Chart($('c-fn-' + i), {type: 'bar',
+      data: {labels: top.map(f => f.funcion.split('::').pop()), datasets: [{label: 'Complejidad ciclomática', data: top.map(f => f.ccn), backgroundColor: COL(i), borderRadius: 4}]},
+      options: {indexAxis: 'y', maintainAspectRatio: false, plugins: {legend: {display: false}, tooltip: {callbacks: {afterLabel: c => `${top[c.dataIndex].archivo}:${top[c.dataIndex].linea} · ${top[c.dataIndex].nloc} líneas`}}},
+        scales: {x: {beginAtZero: true, ticks: {stepSize: 1, color: css('--muted')}, grid: {color: css('--line')}}, y: {grid: {display: false}, ticks: {color: css('--ink'), font: {size: 11}}}}}}));
+  });
+})();
+
+// ---------- Reglas ----------
+$('reglas-body').innerHTML = IDS.map(i => {
+  const R = D.estatico[i].reglas, total = R.total_violaciones;
+  return `<div class="card"><h3>${tag(i)} ${total ? `<span class="tag t-bad">${total} violaciones</span>` : '<span class="tag t-ok">Cumple todas las reglas</span>'}</h3>
+    ${Object.entries(R.por_regla).map(([r, n]) => `<div class="rule"><span>${r}</span><span class="tag ${n ? 't-bad' : 't-ok'}">${n ? n : '✔ 0'}</span></div>`).join('')}
+    <h3 style="margin-top:14px">Recursos funcionales usados</h3>
+    ${Object.entries(R.positivos).map(([r, n]) => `<div class="rule"><span>${r.replace('_', ' ')}</span><b>${n}</b></div>`).join('')}
+    ${total ? `<details><summary>Ver ubicaciones</summary><table>${R.violaciones.map(v => `<tr><td class="mono">${v.archivo}:${v.linea}</td><td>${v.regla}</td><td>${v.detalle}</td></tr>`).join('')}</table></details>` : ''}
+  </div>`;
+}).join('');
+
+// ---------- Rendimiento ----------
+(function rend() {
+  const R = D.rendimiento;
+  if (!R) { $('rend-sub').textContent = ''; $('rend-body').innerHTML = '<div class="empty">Benchmarks omitidos en esta ejecución (--sin-rendimiento).</div>'; return; }
+  $('rend-sub').textContent = `Entradas generadas con la misma semilla; ${R.corridas} corridas por medición con hyperfine (1 de calentamiento).`;
+  const T = R.tamanos, tiempo = (f, i) => { const d = f.lenguajes[i]; return d && d.ok ? (d.hyperfine ? d.hyperfine.mean : d.tiempo_s) : null; };
+  const prep = R.preparacion;
+  $('rend-body').innerHTML = `
+    <div class="grid g4" style="margin-bottom:14px">${IDS.map(i => `<div class="card kpi"><div class="l">${NOM(i)} · preparación</div><div class="v" style="color:${COL(i)}">${prep[i].ok ? fmt(prep[i].construccion_s) + ' s' : '✖'}</div><div class="note">${prep[i].ok ? (i === 'scala' ? 'sbt clean compile' : 'verificación de sintaxis') + ' · ' + prep[i].punto_entrada : prep[i].error}</div></div>`).join('')}
+      ${IDS.map(i => { const ok = T.filter(f => f.lenguajes[i] && f.lenguajes[i].ok).length; return `<div class="card kpi"><div class="l">${NOM(i)} · ejecuciones exitosas</div><div class="v" style="color:${ok === T.length ? 'var(--ok)' : 'var(--bad)'}">${ok}/${T.length}</div><div class="note">tamaños: ${T.map(f => f.n).join(', ')}</div></div>`; }).join('')}</div>
+    <div class="grid g2">
+      <div class="card"><h3>Tiempo total vs. cantidad de solicitudes</h3><div class="chart"><canvas id="c-tiempo"></canvas></div><p class="note">Incluye el arranque del proceso (JVM en Scala, intérprete en Python). Escala logarítmica.</p></div>
+      <div class="card"><h3>Memoria máxima (MB)</h3><div class="chart"><canvas id="c-mem"></canvas></div></div>
+    </div>
+    <div class="card tbl" style="margin-top:14px"><h3>Detalle por tamaño y equivalencia de resultados</h3><table><thead><tr><th class="n">Solicitudes</th>${IDS.map(i => `<th class="n">${NOM(i)} tiempo (s)</th><th class="n">${NOM(i)} memoria</th>`).join('')}<th>¿Misma salida?</th></tr></thead><tbody>${
+      T.map(f => `<tr><td class="n">${fmt(f.n, 0)}</td>${IDS.map(i => { const d = f.lenguajes[i] || {};
+        return d.ok ? `<td class="n">${fmt(tiempo(f, i), 3)}${d.hyperfine ? ` <span class="note">±${fmt(d.hyperfine.stddev, 3)}</span>` : ''}</td><td class="n">${fmt(d.memoria_mb, 1)} MB</td>` : `<td colspan="2"><span class="tag t-bad">falló</span> <span class="note">${d.error || ''}</span></td>`; }).join('')}
+        <td>${f.equivalencia ? (f.equivalencia.identicas ? '<span class="tag t-ok">Idéntica</span>' : `<span class="tag t-warn">${f.equivalencia.lineas_diferentes} líneas distintas</span><div class="note mono">línea ${f.equivalencia.primera_diferencia.linea}: «${f.equivalencia.primera_diferencia.a}» vs «${f.equivalencia.primera_diferencia.b}»</div>`) : '—'}</td></tr>`).join('')}</tbody></table></div>`;
+  const ds = (fn) => IDS.map(i => ({label: NOM(i), data: T.map(f => fn(f, i)), borderColor: COL(i), backgroundColor: COL(i), tension: .25, spanGaps: false, pointRadius: 4}));
+  const ejes = (log) => ({x: {title: {display: true, text: 'solicitudes', color: css('--muted')}, grid: {color: css('--line')}, ticks: {color: css('--muted')}}, y: {type: log ? 'logarithmic' : 'linear', beginAtZero: !log, grid: {color: css('--line')}, ticks: {color: css('--muted')}}});
+  charts.push(new Chart($('c-tiempo'), {type: 'line', data: {labels: T.map(f => fmt(f.n, 0)), datasets: ds(tiempo)}, options: {maintainAspectRatio: false, scales: ejes(true), plugins: {legend: {labels: {color: css('--ink'), boxWidth: 10}}}}}));
+  charts.push(new Chart($('c-mem'), {type: 'bar', data: {labels: T.map(f => fmt(f.n, 0)), datasets: IDS.map(i => ({label: NOM(i), data: T.map(f => (f.lenguajes[i] || {}).ok ? f.lenguajes[i].memoria_mb : null), backgroundColor: COL(i), borderRadius: 4}))}, options: {maintainAspectRatio: false, scales: ejes(false), plugins: {legend: {labels: {color: css('--ink'), boxWidth: 10}}}}}));
+})();
+
+// ---------- Cambios ----------
+(function cambios() {
+  const C = D.comparacion_anterior;
+  if (!C) { $('cambios-body').innerHTML = '<div class="empty">Primera ejecución: aún no hay un análisis anterior con el cual comparar.</div>'; return; }
+  const codigo = IDS.map(i => `${NOM(i)}: ${C.huellas_anteriores[i] === D.lenguajes[i].huella ? 'sin cambios en el código' : '<b>código modificado</b>'}`).join(' · ');
+  $('cambios-body').innerHTML = `<p class="note" style="margin-top:0">Anterior: ${new Date(C.fecha_anterior).toLocaleString('es-CO')} · ${codigo}</p>` + (C.cambios.length ?
+    `<div class="tbl"><table><thead><tr><th>Lenguaje</th><th>Indicador</th><th class="n">Antes</th><th class="n">Ahora</th><th class="n">Δ</th></tr></thead><tbody>${
+      C.cambios.map(c => `<tr><td>${tag(c.lenguaje)}</td><td>${c.indicador}</td><td class="n">${fmt(c.antes, 3)}</td><td class="n">${fmt(c.ahora, 3)}</td><td class="n">${c.ahora > c.antes ? '▲' : '▼'} ${fmt(Math.abs(c.ahora - c.antes), 3)}</td></tr>`).join('')}</tbody></table></div>`
+    : '<div class="empty">Ningún indicador cambió.</div>');
+})();
+
+// ---------- Metodología ----------
+$('metodo-body').innerHTML = `
+  <p><b>Entrada:</b> el código fuente actual de <code>${IDS.map(i => D.lenguajes[i].carpeta).join('</code> y <code>')}</code>. Archivos, funciones, punto de entrada y reglas se detectan automáticamente; la <i>huella</i> del encabezado cambia con cualquier modificación del código.</p>
+  <p><b>1. SonarQube Cloud:</b> pysonar envía el código; los SonarAnalyzer de Scala y Python aplican el perfil “Sonar way”. Las métricas por archivo se agregan por lenguaje vía API. Calificación de mantenibilidad: ratio de deuda = deuda / (líneas × 30 min); A ≤ 5 %, B ≤ 10 %, C ≤ 20 %, D ≤ 50 %.</p>
+  <p><b>2. lizard:</b> complejidad ciclomática, líneas y parámetros por función con el mismo criterio para ambos lenguajes.</p>
+  <p><b>3. Reglas de la práctica:</b> Python con su árbol de sintaxis (<code>ast</code>): for, while, comprensiones, reasignaciones, mutaciones, global. Scala con un lexer que ignora comentarios y textos: var, for, while, do-while, colecciones mutables, return, null.</p>
+  <p><b>4. Rendimiento:</b> Scala se compila desde cero (<code>sbt clean compile</code>); luego cada programa procesa entradas de ${D.rendimiento ? D.rendimiento.tamanos.map(f => f.n).join(', ') : '—'} solicitudes. Memoria con <code>/usr/bin/time</code>, tiempos con <code>hyperfine</code>; se comparan las salidas línea por línea.</p>
+  <p><b>5. Garantías funcionales:</b> en una copia de cada proyecto se inyectan 5 errores que rompen el paradigma (reasignar, mutar un registro, tipo incorrecto, campo inexistente, match incompleto); los puntos de inyección se detectan automáticamente. Además se procesan ${D.garantias && D.garantias.recursion ? D.garantias.recursion.map(f => f.n).join(', ') : '—'} solicitudes para medir hasta dónde aguanta la recursión.</p>
+  <p><b>Puntaje:</b> cada criterio se normaliza entre 0 y 10 de forma relativa (el mejor obtiene 10). El puntaje del escenario es el promedio ponderado; diferencias menores a 0,3 se consideran empate.</p>`;
+
+$('tema').onclick = () => {
+  const r = document.documentElement, oscuro = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  try { localStorage.setItem('tema', oscuro ? 'light' : 'dark'); } catch (e) {}
+  r.dataset.theme = oscuro ? 'light' : 'dark'; location.reload();
+};
+</script>
+</body>
+</html>
