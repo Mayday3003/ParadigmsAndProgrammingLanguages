@@ -23,8 +23,9 @@ public class Empresa {
             new Empleado("Luis", "ML", 4000000.0, 7)
         ));
 
-        //1. crear empleados
+        //1. crear empleados 
 
+        // Proporciona un valor sin recibir entrada
         java.util.function.Supplier<Empleado> proveedorEmpleado = () -> new Empleado("Carlos", "Arte", 4500000, 3); 
         Empleado nuevoEmpleado = proveedorEmpleado.get(); 
         empleados.add(nuevoEmpleado);
@@ -33,20 +34,30 @@ public class Empresa {
 
 
         //2. filtrar por salario, área o antigüedad -  filter(Predicate)
+        // filter(Predicate) Filtra elementos según una condició
 
         java.util.function.Predicate<Empleado> filtroSalario = e -> e.getSalario() > 3500000.0;
         java.util.function.Predicate<Empleado> filtroArea = e -> e.getArea().equals("Marketing");
         java.util.function.Predicate<Empleado> filtroAntiguedad = e -> e.getAntiguedad() > 5;
 
-        List<Empleado> empleadosFiltrados = empleados.stream()
-                .filter(filtroSalario.or(filtroArea).or(filtroAntiguedad))
+        List<Empleado> FiltradoSalario = empleados.stream()
+                .filter(filtroSalario)
+                .collect(java.util.stream.Collectors.toList());
+
+
+        
+        List<Empleado> FiltradoArea = empleados.stream()
+                .filter(filtroArea)
+                .collect(java.util.stream.Collectors.toList());
+
+        List<Empleado> FiltradoAntiguedad = empleados.stream()
+                .filter(filtroAntiguedad)
                 .collect(java.util.stream.Collectors.toList());
         
-        System.out.println("2. [Predicate] Empleados filtrados (Salario > 3500000, Área: Marketing, o Antigüedad > 5):");
-        empleadosFiltrados.forEach(e -> System.out.println("   - " + e.getNombre() + ", Área: " + e.getArea() + ", Salario: " + e.getSalario() + ", Antigüedad: " + e.getAntiguedad()));
+        Em
 
         //3. calcular bonificaciones
-        java.util.function.Function<Empleado, Double> calcularBonificacion = e -> e.getSalario() * 0.10; // 10% de bonificación
+        java.util.function.Function<Empleado, Double> calcularBonificacion = e -> e.getSalario() * 0.10;
         System.out.println("3. [Function] Bonificaciones calculadas:");
         empleados.forEach(e -> {
             double bonificacion = calcularBonificacion.apply(e);
@@ -63,7 +74,8 @@ public class Empresa {
             boolean aplica = aplicaBeneficio.test(e);
             System.out.println("   - " + e.getNombre() + ": Aplica a beneficio? " + (aplica ? "Sí" : "No"));
         });
-
+        
+        //5. actualizar salarios
 
         java.util.function.Consumer<Empleado> actualizarSalario = e -> e.setSalario(e.getSalario() * 1.05); 
         System.out.println("5.Actualización de salarios (Aumento del 5% para empleados con antigüedad > 3 años):");
@@ -78,7 +90,7 @@ public class Empresa {
         //6. acumular masa salarial 
         java.util.function.BinaryOperator<Double> acumularMasaSalarial = (total, salario) -> total + salario;
         double masaSalarialTotal = empleados.stream()
-                .map(e -> e.getSalario() + calcularBonificacion.apply(e)) // Sumar salario + bonificación
+                .map(e -> e.getSalario() + calcularBonificacion.apply(e)) 
                 .reduce(0.0, acumularMasaSalarial);
         System.out.println("6. [BinaryOperator] Masa salarial total (incluyendo bonificaciones): " + masaSalarialTotal);
 

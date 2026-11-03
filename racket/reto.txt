@@ -1,0 +1,20 @@
+                                                            Sistema de liquidación de domicilios
+
+Una empresa de entregas a domicilio presta servicios de mensajería dentro de la ciudad. El valor de cada servicio depende del tipo de vehículo utilizado, la distancia recorrida, la hora en la que se realiza la entrega y la frecuencia con la que el cliente utiliza el servicio.
+La empresa maneja tres tipos de vehículos: bicicleta, moto y carro. La tarifa base para bicicleta es de $4.000, para moto de $6.000 y para carro de $10.000.
+
+Esta tarifa cubre los primeros 5 kilómetros del recorrido.
+
+Cuando la distancia supera los 5 kilómetros, cada kilómetro adicional tiene un costo de $800 para bicicleta, $1.200 para moto y $2.000 para carro.
+Los servicios realizados desde las 6:00 a. m. hasta antes de las 8:00 p. m. no tienen recargo. Los realizados desde las 8:00 p. m. hasta antes de las 10:00 p. m. tienen un recargo del 10%, mientras que los servicios realizados desde las 10:00 p. m. en adelante tienen un recargo del 20%. Para el registro de la hora se utiliza un número entero entre 0 y 23.
+
+Los clientes que hayan realizado 10 o más domicilios durante el mes reciben un descuento del 5%. Este descuento se calcula después de aplicar los costos correspondientes a kilómetros adicionales y recargos por horario.
+
+Para cada servicio se registra el nombre del cliente, tipo de vehículo, distancia recorrida, hora del servicio y cantidad de domicilios realizados durante el mes.
+
+Al finalizar la liquidación se presenta:
+el nombre del cliente, vehículo utilizado, distancia recorrida, tarifa base, cantidad de kilómetros adicionales, costo generado por los kilómetros adicionales, recargo por horario, descuento obtenido y valor total que debe pagar por el domicilio.
+
+Los diferentes cálculos de la liquidación deben mantenerse independientes y producir sus resultados únicamente a partir de la información recibida, sin modificar información externa durante su procesamiento.
+
+Este ejercicio se toma como Challenge y los que lo entreguen en la misma clase, serán tenidos en cuenta en la solución del proyecto de racket final

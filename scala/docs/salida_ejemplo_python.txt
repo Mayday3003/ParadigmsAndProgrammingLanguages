@@ -1,0 +1,230 @@
+==============================================================
+   SOPORTE360 SAS — Análisis de solicitudes de soporte técnico
+==============================================================
+¿Cuántas solicitudes desea registrar?    [ERROR] 'Cantidad' debe ser un número entero mayor o igual a 0. Intente nuevamente.
+¿Cuántas solicitudes desea registrar? 
+--- Solicitud 1 de 6 ---
+  Identificador único:   Nombre del cliente:   Técnico responsable:   Categoría [1=Hardware | 2=Software | 3=Redes]:   Prioridad [1=Alta | 2=Media | 3=Baja]:   Estado [1=Pendiente | 2=En proceso | 3=Finalizado]:   Horas dedicadas:   Costo por hora:   ✔ Solicitud 'S001' registrada.
+
+--- Solicitud 2 de 6 ---
+  Identificador único:    [ERROR] El identificador 'S001' ya está registrado. Intente nuevamente.
+  Identificador único:   Nombre del cliente:    [ERROR] El campo 'Cliente' no puede estar vacío. Intente nuevamente.
+  Nombre del cliente:   Técnico responsable:   Categoría [1=Hardware | 2=Software | 3=Redes]:    [ERROR] 'Sistemas' no es válido para 'Categoría'. Opciones: 1=Hardware | 2=Software | 3=Redes Intente nuevamente.
+  Categoría [1=Hardware | 2=Software | 3=Redes]:   Prioridad [1=Alta | 2=Media | 3=Baja]:   Estado [1=Pendiente | 2=En proceso | 3=Finalizado]:   Horas dedicadas:    [ERROR] 'Horas' no puede ser negativo. Intente nuevamente.
+  Horas dedicadas:   Costo por hora:   ✔ Solicitud 'S002' registrada.
+
+--- Solicitud 3 de 6 ---
+  Identificador único:   Nombre del cliente:   Técnico responsable:   Categoría [1=Hardware | 2=Software | 3=Redes]:   Prioridad [1=Alta | 2=Media | 3=Baja]:   Estado [1=Pendiente | 2=En proceso | 3=Finalizado]:   Horas dedicadas:   Costo por hora:   ✔ Solicitud 'S003' registrada.
+
+--- Solicitud 4 de 6 ---
+  Identificador único:   Nombre del cliente:   Técnico responsable:   Categoría [1=Hardware | 2=Software | 3=Redes]:   Prioridad [1=Alta | 2=Media | 3=Baja]:   Estado [1=Pendiente | 2=En proceso | 3=Finalizado]:   Horas dedicadas:   Costo por hora:   ✔ Solicitud 'S004' registrada.
+
+--- Solicitud 5 de 6 ---
+  Identificador único:   Nombre del cliente:   Técnico responsable:   Categoría [1=Hardware | 2=Software | 3=Redes]:   Prioridad [1=Alta | 2=Media | 3=Baja]:   Estado [1=Pendiente | 2=En proceso | 3=Finalizado]:   Horas dedicadas:   Costo por hora:    [ERROR] 'diez' no es un número válido para 'Costo por hora'. Intente nuevamente.
+  Costo por hora:   ✔ Solicitud 'S005' registrada.
+
+--- Solicitud 6 de 6 ---
+  Identificador único:   Nombre del cliente:   Técnico responsable:   Categoría [1=Hardware | 2=Software | 3=Redes]:   Prioridad [1=Alta | 2=Media | 3=Baja]:   Estado [1=Pendiente | 2=En proceso | 3=Finalizado]:   Horas dedicadas:   Costo por hora:   ✔ Solicitud 'S006' registrada.
+
+==============================================================================
+  RF02 · CONSULTA GENERAL DE SOLICITUDES
+==============================================================================
+  ID     Cliente          Técnico        Categoría Prior. Estado        Horas            Valor
+  ----------------------------------------------------------------------------
+  S001   Bancolombia      Laura Gómez    Hardware  Alta   Pendiente      8,00     $ 360.000,00
+  S002   Bancolombia      Carlos Ruiz    Software  Alta   En proceso     5,00     $ 250.000,00
+  S003   EAFIT            Laura Gómez    Redes     Alta   En proceso    12,00     $ 480.000,00
+  S004   Clínica Las Veg… Andrés Mejía   Software  Baja   Finalizado     2,00      $ 70.000,00
+  S005   EAFIT            Carlos Ruiz    Redes     Baja   Finalizado     6,50     $ 390.000,00
+  S006   bancolombia      Andrés Mejía   Hardware  Alta   Finalizado    10,00     $ 380.000,00
+
+  Total registradas: 6
+
+==============================================================================
+  RF14 · RESUMEN EJECUTIVO
+==============================================================================
+  Total de solicitudes registradas  : 6
+  Solicitudes finalizadas           : 3
+  Solicitudes sin finalizar         : 3
+  Categoría con mayor demanda       : Hardware (2)
+  Técnico con más horas             : Laura Gómez (20,00 h)
+  Valor económico total             : $ 1.930.000,00
+  Tiempo promedio de atención       : 7,25 h
+  Solicitudes críticas              : 3
+  Cliente de mayor valor            : Bancolombia ($ 990.000,00)
+
+=================== MENÚ DE CONSULTAS — SOPORTE360 ===================
+   1. Consulta general (RF02)
+   2. Solicitudes sin finalizar (RF03)
+   3. Distribución por categoría (RF04)
+   4. Análisis económico (RF05)
+   5. Top 3 más costosas (RF06)
+   6. Desempeño de técnicos (RF07)
+   7. Clientes frecuentes (RF08)
+   8. Top 3 clientes por valor (RF09)
+   9. Solicitudes críticas (RF10)
+  10. Tiempos elevados (RF11)
+  11. Clasificación por prioridad (RF12)
+  12. Resumen ejecutivo (RF14)
+  13. Mostrar todos los reportes
+   0. Salir
+Seleccione una opción: 
+==============================================================================
+  RF02 · CONSULTA GENERAL DE SOLICITUDES
+==============================================================================
+  ID     Cliente          Técnico        Categoría Prior. Estado        Horas            Valor
+  ----------------------------------------------------------------------------
+  S001   Bancolombia      Laura Gómez    Hardware  Alta   Pendiente      8,00     $ 360.000,00
+  S002   Bancolombia      Carlos Ruiz    Software  Alta   En proceso     5,00     $ 250.000,00
+  S003   EAFIT            Laura Gómez    Redes     Alta   En proceso    12,00     $ 480.000,00
+  S004   Clínica Las Veg… Andrés Mejía   Software  Baja   Finalizado     2,00      $ 70.000,00
+  S005   EAFIT            Carlos Ruiz    Redes     Baja   Finalizado     6,50     $ 390.000,00
+  S006   bancolombia      Andrés Mejía   Hardware  Alta   Finalizado    10,00     $ 380.000,00
+
+  Total registradas: 6
+
+==============================================================================
+  RF03 · SOLICITUDES SIN FINALIZAR
+==============================================================================
+  >> Pendientes (1)
+  ID     Cliente          Técnico        Categoría Prior. Estado        Horas            Valor
+  ----------------------------------------------------------------------------
+  S001   Bancolombia      Laura Gómez    Hardware  Alta   Pendiente      8,00     $ 360.000,00
+
+  >> En proceso (2)
+  ID     Cliente          Técnico        Categoría Prior. Estado        Horas            Valor
+  ----------------------------------------------------------------------------
+  S002   Bancolombia      Carlos Ruiz    Software  Alta   En proceso     5,00     $ 250.000,00
+  S003   EAFIT            Laura Gómez    Redes     Alta   En proceso    12,00     $ 480.000,00
+
+  Total sin finalizar: 3
+
+==============================================================================
+  RF04 · DISTRIBUCIÓN POR CATEGORÍAS
+==============================================================================
+  Hardware  :   2  (33,33 %)
+  Software  :   2  (33,33 %)
+  Redes     :   2  (33,33 %)
+
+  Categoría con mayor demanda: Hardware (2 solicitudes)
+
+==============================================================================
+  RF05 · ANÁLISIS ECONÓMICO
+==============================================================================
+  S001      8,00 h x    $ 45.000,00 =     $ 360.000,00
+  S002      5,00 h x    $ 50.000,00 =     $ 250.000,00
+  S003     12,00 h x    $ 40.000,00 =     $ 480.000,00
+  S004      2,00 h x    $ 35.000,00 =      $ 70.000,00
+  S005      6,50 h x    $ 60.000,00 =     $ 390.000,00
+  S006     10,00 h x    $ 38.000,00 =     $ 380.000,00
+
+  Valor total de los servicios : $ 1.930.000,00
+  Valor promedio por solicitud : $ 321.666,67
+
+==============================================================================
+  RF06 · TOP 3 SOLICITUDES DE MAYOR COSTO
+==============================================================================
+  1. S003   EAFIT              Redes         $ 480.000,00
+  2. S005   EAFIT              Redes         $ 390.000,00
+  3. S006   bancolombia        Hardware      $ 380.000,00
+
+==============================================================================
+  RF07 · DESEMPEÑO DE LOS TÉCNICOS
+==============================================================================
+  Técnico              Solicitudes      Horas Finalizadas
+  Laura Gómez                    2      20,00           0
+  Andrés Mejía                   2      12,00           2
+  Carlos Ruiz                    2      11,50           1
+
+  Técnico con mayor carga: Laura Gómez (20,00 horas)
+
+==============================================================================
+  RF08 · CLIENTES FRECUENTES (más de una solicitud)
+==============================================================================
+  Bancolombia                 3 solicitudes
+  EAFIT                       2 solicitudes
+
+==============================================================================
+  RF09 · TOP 3 CLIENTES POR VALOR ECONÓMICO
+==============================================================================
+  1. Bancolombia                     $ 990.000,00
+  2. EAFIT                           $ 870.000,00
+  3. Clínica Las Vegas                $ 70.000,00
+
+==============================================================================
+  RF10 · SOLICITUDES CRÍTICAS (prioridad Alta sin finalizar)
+==============================================================================
+  ID     Cliente            Técnico          Categoría Estado        Horas
+  S003   EAFIT              Laura Gómez      Redes     En proceso    12,00
+  S001   Bancolombia        Laura Gómez      Hardware  Pendiente      8,00
+  S002   Bancolombia        Carlos Ruiz      Software  En proceso     5,00
+
+  Total críticas: 3
+
+==============================================================================
+  RF11 · SERVICIOS CON TIEMPOS ELEVADOS
+==============================================================================
+  Tiempo promedio de atención: 7,25 horas
+
+  ID     Cliente          Técnico        Categoría Prior. Estado        Horas            Valor
+  ----------------------------------------------------------------------------
+  S003   EAFIT            Laura Gómez    Redes     Alta   En proceso    12,00     $ 480.000,00
+  S006   bancolombia      Andrés Mejía   Hardware  Alta   Finalizado    10,00     $ 380.000,00
+  S001   Bancolombia      Laura Gómez    Hardware  Alta   Pendiente      8,00     $ 360.000,00
+
+==============================================================================
+  RF12 · CLASIFICACIÓN POR PRIORIDAD
+==============================================================================
+  Alta  :   4  (66,67 %)
+  Media :   0  (0,00 %)
+  Baja  :   2  (33,33 %)
+
+  Porcentaje de prioridad Alta: 66,67 %
+
+==============================================================================
+  RF14 · RESUMEN EJECUTIVO
+==============================================================================
+  Total de solicitudes registradas  : 6
+  Solicitudes finalizadas           : 3
+  Solicitudes sin finalizar         : 3
+  Categoría con mayor demanda       : Hardware (2)
+  Técnico con más horas             : Laura Gómez (20,00 h)
+  Valor económico total             : $ 1.930.000,00
+  Tiempo promedio de atención       : 7,25 h
+  Solicitudes críticas              : 3
+  Cliente de mayor valor            : Bancolombia ($ 990.000,00)
+
+=================== MENÚ DE CONSULTAS — SOPORTE360 ===================
+   1. Consulta general (RF02)
+   2. Solicitudes sin finalizar (RF03)
+   3. Distribución por categoría (RF04)
+   4. Análisis económico (RF05)
+   5. Top 3 más costosas (RF06)
+   6. Desempeño de técnicos (RF07)
+   7. Clientes frecuentes (RF08)
+   8. Top 3 clientes por valor (RF09)
+   9. Solicitudes críticas (RF10)
+  10. Tiempos elevados (RF11)
+  11. Clasificación por prioridad (RF12)
+  12. Resumen ejecutivo (RF14)
+  13. Mostrar todos los reportes
+   0. Salir
+Seleccione una opción:    [ERROR] Opción no válida.
+
+=================== MENÚ DE CONSULTAS — SOPORTE360 ===================
+   1. Consulta general (RF02)
+   2. Solicitudes sin finalizar (RF03)
+   3. Distribución por categoría (RF04)
+   4. Análisis económico (RF05)
+   5. Top 3 más costosas (RF06)
+   6. Desempeño de técnicos (RF07)
+   7. Clientes frecuentes (RF08)
+   8. Top 3 clientes por valor (RF09)
+   9. Solicitudes críticas (RF10)
+  10. Tiempos elevados (RF11)
+  11. Clasificación por prioridad (RF12)
+  12. Resumen ejecutivo (RF14)
+  13. Mostrar todos los reportes
+   0. Salir
+Seleccione una opción: 
+Gracias por usar Soporte360. ¡Hasta pronto!

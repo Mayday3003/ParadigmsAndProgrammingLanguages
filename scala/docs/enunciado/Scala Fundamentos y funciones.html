@@ -1,0 +1,484 @@
+<!doctype html>
+<!DOCTYPE html>
+
+<html lang="es"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Scala by Juangui</title><style>
+:root{--bg:#f5f7fb;--paper:#fff;--ink:#17243a;--muted:#526178;--blue:#2259a6;--border:#dce4ee;--code:#142238}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}.layout{max-width:1120px;margin:auto;padding:30px 22px 70px}.intro{margin:0 0 24px}.intro h1{font-size:clamp(30px,4vw,48px);line-height:1.12;margin:0 0 12px}.intro p{max-width:800px;color:var(--muted);font-size:18px;margin:0}.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0}.levels a{display:block;padding:18px;border:1px solid var(--border);border-radius:14px;background:white;color:var(--ink);text-decoration:none;font-weight:700}.levels a:hover,.levels a:focus{outline:2px solid var(--blue)}.levels small{display:block;font-weight:400;color:var(--muted)}section.level{margin:30px 0 44px}.level-title{font-size:28px;margin:0 0 16px;border-bottom:3px solid var(--blue);padding-bottom:10px}.topic{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:22px 26px;margin:16px 0;box-shadow:0 4px 16px #17243a08}.topic h3{margin:0 0 10px;font-size:21px}.topic p{margin:8px 0}.topic ul{margin:8px 0;padding-left:22px}.example-title{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-top:16px}pre{background:var(--code);color:#edf4ff;border-radius:12px;padding:18px;overflow-x:auto;font:14px/1.6 Consolas,Monaco,monospace;white-space:pre}code{font-family:Consolas,Monaco,monospace}p code,li code{background:#eaf0f8;border-radius:4px;padding:1px 5px}.result{border-left:3px solid #2e856c;background:#edf8f3;padding:10px 14px;border-radius:5px;margin-top:10px}.task{border-left:4px solid #d58b26;background:#fff8ed;padding:12px 16px;margin-top:16px;border-radius:5px}.task strong{display:block}.tag{font-size:13px;color:#2259a6;font-weight:700}.note{color:var(--muted)}@media(max-width:700px){.levels{grid-template-columns:repeat(2,1fr)}.topic{padding:18px}.layout{padding:22px 14px 50px}}@media print{body{background:white}.layout{max-width:none;padding:0}.topic{break-inside:avoid;box-shadow:none}.levels{display:none}pre{white-space:pre-wrap;overflow:visible;color:#111;background:#f0f2f5}section.level{break-before:page}}
+</style><style>.reference-table{margin:34px 0}.reference-table>p{color:var(--muted)}.table-tools{display:flex;align-items:end;flex-wrap:wrap;gap:14px;margin:18px 0}.table-tools label{display:flex;flex-direction:column;gap:4px;font-weight:650}.table-tools input,.table-tools select{border:1px solid #b8c7da;background:#fff;border-radius:9px;padding:11px;font:inherit;min-width:215px}/* Asegura que las categorías del desplegable sean legibles incluso con tema oscuro del sistema. */
+.table-tools select { color:#17243a !important; background-color:#ffffff !important; color-scheme:light; -webkit-text-fill-color:#17243a; }
+.table-tools select option { color:#17243a !important; background:#ffffff !important; font-weight:400; }
+.table-tools select option:checked { color:#102c55 !important; background:#c8e1ff !important; }
+.table-tools #countSyntax{color:var(--muted)}.table-scroll{overflow-x:auto;border:1px solid var(--border);border-radius:14px;background:#fff}.syntax-table tbody tr[hidden],.syntax-table tbody tr.is-filtered{display:none !important}.syntax-table{width:100%;border-collapse:collapse;font-size:14px;min-width:790px}.syntax-table th{text-align:left;background:#eaf0f8;position:sticky;top:0;z-index:1}.syntax-table th,.syntax-table td{padding:13px;vertical-align:top;border-bottom:1px solid var(--border)}.syntax-table th:nth-child(1){width:16%}.syntax-table th:nth-child(2){width:14%}.syntax-table th:nth-child(3){width:25%}.syntax-table th:nth-child(4){width:45%}.syntax-table pre{margin:5px 0 0;padding:12px;font-size:12px;line-height:1.5;white-space:pre;max-height:320px;overflow:auto}.codebar{display:flex;justify-content:flex-end}.copycode{background:#2259a6;color:white;border:0;border-radius:7px;padding:7px 11px;cursor:pointer;font-weight:650}.copycode:hover{background:#173e76}@media print{.table-tools,.copycode{display:none}.syntax-table pre{white-space:pre-wrap;max-height:none}}.resetfilters{border:1px solid #b8c7da;background:#fff;border-radius:9px;padding:11px 15px;font:inherit;cursor:pointer}.resetfilters:hover{background:#eaf0f8}</style><style>
+.intro h1{text-align:center;font-size:clamp(30px,4vw,46px);margin:0 auto 14px;letter-spacing:-.025em}
+.solution-panel{margin-top:15px;border:1px solid #c4d8e5;border-radius:12px;background:#f0f6fb;padding:15px}
+.solution-panel h4{font-size:17px;margin:0 0 8px}
+.solution-panel p{margin:8px 0}
+.solution-panel pre{margin:8px 0}
+.problem{border-left:4px solid #315e99;background:#fff;padding:20px 23px;margin:24px 0;border-radius:12px;border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.problem h3{margin:0 0 12px;font-size:23px}
+.problem p{margin:8px 0}
+.problem ul{padding-left:20px}
+.problem .solution-panel{background:#f0f6fb}
+.problem .codebar,.solution-panel .codebar{margin-top:5px}
+.complex-title{margin-top:38px}
+.note-test{background:#f5f8ef;border-left:3px solid #7b954b;padding:10px 14px;border-radius:6px;margin-top:10px}
+@media print {.solution-panel pre,.problem pre{white-space:pre-wrap;max-height:none}}
+</style></head><body><main class="layout"><div class="intro"><h1>Scala By Juangui</h1></div>
+<section class="level" id="nivel1"><h2 class="level-title">Fundamentos del lenguaje</h2>
+<article class="topic"><h3>1. ¿Qué es Scala y para qué se utiliza?</h3><p>Scala es un lenguaje que mezcla dos maneras de programar: <strong>orientada a objetos</strong> y <strong>funcional</strong>. Corre sobre la máquina virtual de Java (JVM), así que también puede usar un montón de herramientas de Java.</p><p>¿Para qué sirve? Para sistemas de empresas, servicios que funcionan por detrás de una aplicación y análisis de datos. La ventaja es que permite trabajar listas y datos sin estar cambiándolos a cada rato.</p><p class="note">Los ejemplos de esta guía usan sintaxis común a Scala 2.13 y Scala 3, a menos que se avise algo distinto.</p></article>
+<article class="topic"><h3>2. Primer programa: <code>object</code>, <code>main</code> y <code>println</code></h3><p>Con <code>object</code> armas un objeto único; <code>main</code> indica dónde comienza el programa y <code>println</code> muestra el resultado en pantalla.</p><div class="example-title">Ejemplo completo</div><pre><code>object HolaScala {
+  def main(args: Array[String]): Unit = {
+    println("¡Hola desde Scala!")
+  }
+}</code></pre><div class="result">Salida: ¡Hola desde Scala!</div><p>En IntelliJ IDEA crea un proyecto Scala con sbt, guarda <code>HolaScala.scala</code> en <code>src/main/scala</code> y ejecuta el objeto. ¡Así de sencillo!</p></article>
+<article class="topic"><h3>3. Variables, constantes y tipos de datos</h3><p><code>val</code> guarda una referencia que no se puede reasignar; <code>var</code> deja cambiarla. Los tipos más comunes son <code>Int</code>, <code>Double</code>, <code>Boolean</code> y <code>String</code>. En programación funcional normalmente preferimos <code>val</code>.</p><pre><code>val nombre: String = "Ana"
+val edad: Int = 21
+val promedio: Double = 4.5
+val activo: Boolean = true
+var intentos: Int = 0
+intentos += 1
+println(s"$nombre tiene $edad años")</code></pre><p>Si le pones <code>s</code> antes de las comillas, puedes meter variables dentro del texto con <code>$variable</code>.</p></article>
+<article class="topic"><h3>4. Entrada de datos por teclado</h3><p><code>StdIn.readLine()</code> lee lo que escribes. Con <code>toIntOption</code> intentas pasarlo a entero sin que el programa se caiga si alguien escribe otra cosa.</p><pre><code>import scala.io.StdIn
+
+object Entrada {
+  def main(args: Array[String]): Unit = {
+    print("Ingrese su edad: ")
+    val edad = StdIn.readLine().toIntOption
+    println(edad.getOrElse(0))
+  }
+}</code></pre><p>Si escribes <code>23</code>, sale <code>23</code>. Si ingresas letras, el ejemplo muestra <code>0</code>. En un sistema real conviene avisar el error y pedir el dato de nuevo.</p></article>
+<article class="topic"><h3>5. Operadores y expresiones</h3><p>Para hacer cuentas usas <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> y <code>%</code>. Para comparar tienes <code>==</code>, <code>!=</code>, <code>&gt;</code> y <code>&lt;</code>. Y para combinar condiciones, <code>&amp;&amp;</code>, <code>||</code> y <code>!</code>.</p><pre><code>val a = 12
+val b = 5
+println(a + b)        // 17
+println(a / b)        // 2: división entera
+println(a.toDouble / b) // 2.4
+println(a &gt; b &amp;&amp; b &gt; 0) // true</code></pre><div class="task"><strong>Manos a la obra</strong>Pide dos números por teclado, comprueba que ambos sean enteros y muestra suma, resta, multiplicación y división. Evita dividir entre cero.</div></article></section>
+<section class="level" id="nivel2"><h2 class="level-title">Condicionales, ciclos y colecciones</h2>
+<article class="topic"><h3>6. Condicionales: <code>if</code>, <code>else if</code> y <code>else</code></h3><p>Con <code>if</code> eliges qué hacer según una condición. Ten presente que en Scala también puede devolver un valor que guardas directamente en un <code>val</code>.</p><pre><code>val nota = 4.2
+val estado = if (nota &gt;= 3.0) "Aprobado" else "Reprobado"
+println(estado)
+
+val nivel = if (nota &gt;= 4.5) "Excelente"
+            else if (nota &gt;= 3.0) "Suficiente"
+            else "Insuficiente"</code></pre></article>
+<article class="topic"><h3>7. Condicionales por patrones con <code>match</code></h3><p>Con <code>match</code> revisas diferentes casos y obtienes un resultado. El guion bajo <code>_</code> funciona como el caso de respaldo cuando ninguno coincide.</p><pre><code>val opcion = 2
+val mensaje = opcion match {
+  case 1 =&gt; "Registrar"
+  case 2 =&gt; "Consultar"
+  case 3 =&gt; "Salir"
+  case _ =&gt; "Opción desconocida"
+}
+println(mensaje)</code></pre></article>
+<article class="topic"><h3>8. Ciclos: <code>for</code> y <code>while</code></h3><p>Los ciclos sirven para repetir tareas. <code>for</code> recorre rangos o colecciones y <code>while</code> repite mientras algo se cumpla. Más adelante vamos a reemplazar muchos ciclos por operaciones funcionales.</p><pre><code>for (numero &lt;- 1 to 5) {
+  println(numero)
+}
+
+var contador = 1
+while (contador &lt;= 3) {
+  println(contador)
+  contador += 1
+}</code></pre><p><code>1 to 5</code> llega hasta el 5; <code>1 until 5</code> termina en 4. El viejo <code>do ... while</code> existe en Scala 2, pero no en Scala 3; por eso acá evitamos usarlo.</p></article>
+<article class="topic"><h3>9. Listas, vectores, conjuntos y mapas</h3><p>Con <code>List</code> y <code>Vector</code> armas colecciones inmutables; <code>Set</code> evita repetidos, y <code>Map</code> guarda parejas de clave y valor. Cada una resuelve una necesidad distinta.</p><pre><code>val edades = List(18, 21, 19)
+val ciudades = Vector("Medellín", "Bello")
+val codigos = Set(101, 101, 102)
+val precios = Map("Pan" -&gt; 2500, "Leche" -&gt; 4800)
+
+println(edades.head)             // 18
+println(ciudades(1))             // Bello
+println(codigos.size)            // 2
+println(precios.get("Pan"))      // Some(2500)</code></pre></article>
+<article class="topic"><h3>10. Funciones propias con <code>def</code></h3><p>Una función recibe datos, hace una operación y entrega un resultado. La palabra <code>def</code> la define y el tipo después de los dos puntos dice qué devuelve.</p><pre><code>def calcularDescuento(precio: Double, porcentaje: Double): Double = {
+  precio * porcentaje / 100
+}
+
+val descuento = calcularDescuento(100000, 10)
+println(descuento) // 10000.0</code></pre><div class="task"><strong>Manos a la obra</strong>Ingresa una cantidad N de precios desde teclado, guárdalos en una lista y clasifica cada precio según un rango definido por el negocio. Muestra el total y el promedio; revisa qué pasa si N es cero.</div></article></section>
+
+<section aria-label="Consulta de sintaxis" class="reference-table"><h2 class="level-title">Tabla Resumen</h2><div class="table-tools"><label>Buscar <input id="searchSyntax" placeholder="Ej. filter, condicional, lista..." type="search"/></label><label>Tipo <select id="categorySyntax"><option value="">Todos</option><option value="Ciclos">Ciclos</option><option value="Clases y objetos">Clases y objetos</option><option value="Colecciones">Colecciones</option><option value="Condicionales">Condicionales</option><option value="Entrada y salida">Entrada y salida</option><option value="Funciones">Funciones</option><option value="Manejo de errores">Manejo de errores</option><option value="Programación funcional">Programación funcional</option><option value="Variables y operadores">Variables y operadores</option></select></label><button class="resetfilters" id="resetSyntax" type="button">Limpiar filtros</button><span aria-live="polite" id="countSyntax"></span></div><div class="table-scroll"><table class="syntax-table"><thead><tr><th>Tipo</th><th>Nombre / sintaxis</th><th>Descripción de uso</th><th>Ejemplo completo en Scala</th></tr></thead><tbody><tr data-category="Variables y operadores"><td>Variables y operadores</td><td><strong>val / var</strong></td><td>Guarda valores que no cambian con val, o que sí puedes actualizar con var.</td><td><div class="codebar"><button class="copycode" data-id="code-0" type="button">Copiar código</button></div><pre><code id="code-0">object Ejemplo01 {
+  def main(args: Array[String]): Unit = {
+    val precio = 2500
+    var cantidad = 2
+    cantidad += 1
+    println(precio * cantidad)
+  }
+}</code></pre></td></tr><tr data-category="Variables y operadores"><td>Variables y operadores</td><td><strong>Operadores aritméticos</strong></td><td>Haz cuentas: suma, resta, multiplicación, división y residuo.</td><td><div class="codebar"><button class="copycode" data-id="code-1" type="button">Copiar código</button></div><pre><code id="code-1">object Ejemplo02 {
+  def main(args: Array[String]): Unit = {
+    val a = 10
+    val b = 3
+    println(s"Suma: ${a + b}, resta: ${a - b}")
+    println(s"Producto: ${a * b}, división: ${a.toDouble / b}")
+    println(s"Residuo: ${a % b}")
+  }
+}</code></pre></td></tr><tr data-category="Variables y operadores"><td>Variables y operadores</td><td><strong>Operadores lógicos</strong></td><td>Junta condiciones con &amp;&amp;, || y !.</td><td><div class="codebar"><button class="copycode" data-id="code-2" type="button">Copiar código</button></div><pre><code id="code-2">object Ejemplo03 {
+  def main(args: Array[String]): Unit = {
+    val edad = 20
+    val permiso = true
+    println(edad &gt;= 18 &amp;&amp; permiso)
+    println(edad &lt; 18 || permiso)
+    println(!permiso)
+  }
+}</code></pre></td></tr><tr data-category="Entrada y salida"><td>Entrada y salida</td><td><strong>StdIn.readLine</strong></td><td>Lee lo que escriban por teclado e intenta pasarlo a entero.</td><td><div class="codebar"><button class="copycode" data-id="code-3" type="button">Copiar código</button></div><pre><code id="code-3">import scala.io.StdIn
+
+object Ejemplo04 {
+  def main(args: Array[String]): Unit = {
+    print("Ingresa un número: ")
+    val n = StdIn.readLine().toIntOption
+    println(n.getOrElse(0))
+  }
+}</code></pre></td></tr><tr data-category="Entrada y salida"><td>Entrada y salida</td><td><strong>println / interpolación</strong></td><td>Muestra resultados mezclando texto con variables.</td><td><div class="codebar"><button class="copycode" data-id="code-4" type="button">Copiar código</button></div><pre><code id="code-4">object Ejemplo05 {
+  def main(args: Array[String]): Unit = {
+    val nombre = "Sara"
+    println(s"Hola, $nombre")
+  }
+}</code></pre></td></tr><tr data-category="Condicionales"><td>Condicionales</td><td><strong>if / else</strong></td><td>Elige entre dos caminos.</td><td><div class="codebar"><button class="copycode" data-id="code-5" type="button">Copiar código</button></div><pre><code id="code-5">object Ejemplo06 {
+  def main(args: Array[String]): Unit = {
+    val edad = 19
+    if (edad &gt;= 18) println("Mayor")
+    else println("Menor")
+  }
+}</code></pre></td></tr><tr data-category="Condicionales"><td>Condicionales</td><td><strong>else if</strong></td><td>Revisa más condiciones, una por una.</td><td><div class="codebar"><button class="copycode" data-id="code-6" type="button">Copiar código</button></div><pre><code id="code-6">object Ejemplo07 {
+  def main(args: Array[String]): Unit = {
+    val nota = 4.2
+    if (nota &gt;= 4.5) println("Excelente")
+    else if (nota &gt;= 3.0) println("Aprobado")
+    else println("Reprobado")
+  }
+}</code></pre></td></tr><tr data-category="Condicionales"><td>Condicionales</td><td><strong>match / case</strong></td><td>Escoge un resultado dependiendo del patrón.</td><td><div class="codebar"><button class="copycode" data-id="code-7" type="button">Copiar código</button></div><pre><code id="code-7">object Ejemplo08 {
+  def main(args: Array[String]): Unit = {
+    val dia = 2
+    val texto = dia match {
+      case 1 =&gt; "Lunes"
+      case 2 =&gt; "Martes"
+      case _ =&gt; "Otro"
+    }
+    println(texto)
+  }
+}</code></pre></td></tr><tr data-category="Ciclos"><td>Ciclos</td><td><strong>for / to</strong></td><td>Recorre números incluyendo el último.</td><td><div class="codebar"><button class="copycode" data-id="code-8" type="button">Copiar código</button></div><pre><code id="code-8">object Ejemplo09 {
+  def main(args: Array[String]): Unit = {
+    for (i &lt;- 1 to 5) {
+      println(i)
+    }
+  }
+}</code></pre></td></tr><tr data-category="Ciclos"><td>Ciclos</td><td><strong>until</strong></td><td>Arma un rango sin incluir el número final.</td><td><div class="codebar"><button class="copycode" data-id="code-9" type="button">Copiar código</button></div><pre><code id="code-9">object Ejemplo10 {
+  def main(args: Array[String]): Unit = {
+    for (i &lt;- 1 until 5) {
+      println(i)
+    }
+  }
+}</code></pre></td></tr><tr data-category="Ciclos"><td>Ciclos</td><td><strong>while</strong></td><td>Repite mientras se cumpla la condición.</td><td><div class="codebar"><button class="copycode" data-id="code-10" type="button">Copiar código</button></div><pre><code id="code-10">object Ejemplo11 {
+  def main(args: Array[String]): Unit = {
+    var n = 1
+    while (n &lt;= 3) {
+      println(n)
+      n += 1
+    }
+  }
+}</code></pre></td></tr><tr data-category="Ciclos"><td>Ciclos</td><td><strong>for con filtro</strong></td><td>Recorre únicamente los valores que pasen el filtro.</td><td><div class="codebar"><button class="copycode" data-id="code-11" type="button">Copiar código</button></div><pre><code id="code-11">object Ejemplo12 {
+  def main(args: Array[String]): Unit = {
+    for (n &lt;- 1 to 10 if n % 2 == 0) {
+      println(n)
+    }
+  }
+}</code></pre></td></tr><tr data-category="Funciones"><td>Funciones</td><td><strong>def</strong></td><td>Crea una función que puedes llamar varias veces.</td><td><div class="codebar"><button class="copycode" data-id="code-12" type="button">Copiar código</button></div><pre><code id="code-12">object Ejemplo13 {
+  def main(args: Array[String]): Unit = {
+    def sumar(a: Int, b: Int): Int = a + b
+    println(sumar(4, 7))
+  }
+}</code></pre></td></tr><tr data-category="Funciones"><td>Funciones</td><td><strong>Lambda (=&gt;)</strong></td><td>Escribe una función sin ponerle nombre.</td><td><div class="codebar"><button class="copycode" data-id="code-13" type="button">Copiar código</button></div><pre><code id="code-13">object Ejemplo14 {
+  def main(args: Array[String]): Unit = {
+    val doble: Int =&gt; Int = n =&gt; n * 2
+    println(doble(5))
+  }
+}</code></pre></td></tr><tr data-category="Funciones"><td>Funciones</td><td><strong>compose / andThen</strong></td><td>Conecta funciones y fíjate en qué orden se ejecutan.</td><td><div class="codebar"><button class="copycode" data-id="code-14" type="button">Copiar código</button></div><pre><code id="code-14">object Ejemplo15 {
+  def main(args: Array[String]): Unit = {
+    val doble: Int =&gt; Int = _ * 2
+    val sumarUno: Int =&gt; Int = _ + 1
+    println((doble andThen sumarUno)(3))
+    println((doble compose sumarUno)(3))
+  }
+}</code></pre></td></tr><tr data-category="Colecciones"><td>Colecciones</td><td><strong>List</strong></td><td>Arma una lista que no se modifica directamente.</td><td><div class="codebar"><button class="copycode" data-id="code-15" type="button">Copiar código</button></div><pre><code id="code-15">object Ejemplo16 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(3, 5, 7)
+    println(numeros)
+  }
+}</code></pre></td></tr><tr data-category="Colecciones"><td>Colecciones</td><td><strong>Vector</strong></td><td>Guarda elementos con acceso por posición, sin mutarlos.</td><td><div class="codebar"><button class="copycode" data-id="code-16" type="button">Copiar código</button></div><pre><code id="code-16">object Ejemplo17 {
+  def main(args: Array[String]): Unit = {
+    val ciudades = Vector("Bello", "Medellín")
+    println(ciudades(1))
+  }
+}</code></pre></td></tr><tr data-category="Colecciones"><td>Colecciones</td><td><strong>Array</strong></td><td>Trabaja con un arreglo de tamaño fijo.</td><td><div class="codebar"><button class="copycode" data-id="code-17" type="button">Copiar código</button></div><pre><code id="code-17">object Ejemplo18 {
+  def main(args: Array[String]): Unit = {
+    val numeros = Array(1, 2, 3)
+    println(numeros.mkString(", "))
+  }
+}</code></pre></td></tr><tr data-category="Colecciones"><td>Colecciones</td><td><strong>Set / distinct</strong></td><td>Guarda valores únicos o saca los repetidos.</td><td><div class="codebar"><button class="copycode" data-id="code-18" type="button">Copiar código</button></div><pre><code id="code-18">object Ejemplo19 {
+  def main(args: Array[String]): Unit = {
+    val codigos = Set(1, 1, 2)
+    println(codigos)
+    println(List(1, 1, 2).distinct)
+  }
+}</code></pre></td></tr><tr data-category="Colecciones"><td>Colecciones</td><td><strong>Map (clave-valor)</strong></td><td>Relaciona una clave con su valor para consultarlo fácil.</td><td><div class="codebar"><button class="copycode" data-id="code-19" type="button">Copiar código</button></div><pre><code id="code-19">object Ejemplo20 {
+  def main(args: Array[String]): Unit = {
+    val precios = Map("Pan" -&gt; 2500, "Leche" -&gt; 4800)
+    println(precios.get("Pan"))
+  }
+}</code></pre></td></tr><tr data-category="Colecciones"><td>Colecciones</td><td><strong>Tuple</strong></td><td>Junta datos de diferentes tipos en una tupla.</td><td><div class="codebar"><button class="copycode" data-id="code-20" type="button">Copiar código</button></div><pre><code id="code-20">object Ejemplo21 {
+  def main(args: Array[String]): Unit = {
+    val registro = (101, "Toyota", true)
+    println(registro._2)
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>map</strong></td><td>Cambia cada elemento aplicando una función.</td><td><div class="codebar"><button class="copycode" data-id="code-21" type="button">Copiar código</button></div><pre><code id="code-21">object Ejemplo22 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(1, 2, 3)
+    println(numeros.map(_ * 2))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>filter</strong></td><td>Quedate solo con los que cumplen una condición.</td><td><div class="codebar"><button class="copycode" data-id="code-22" type="button">Copiar código</button></div><pre><code id="code-22">object Ejemplo23 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(1, 2, 3, 4)
+    println(numeros.filter(_ % 2 == 0))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>reduce</strong></td><td>Junta todos los elementos en un resultado; necesita datos.</td><td><div class="codebar"><button class="copycode" data-id="code-23" type="button">Copiar código</button></div><pre><code id="code-23">object Ejemplo24 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(1, 2, 3)
+    println(numeros.reduce(_ + _))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>reduceOption</strong></td><td>Combina elementos sin reventar cuando la lista esté vacía.</td><td><div class="codebar"><button class="copycode" data-id="code-24" type="button">Copiar código</button></div><pre><code id="code-24">object Ejemplo25 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List.empty[Int]
+    println(numeros.reduceOption(_ + _))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>foldLeft</strong></td><td>Acumula desde la izquierda con un valor de arranque.</td><td><div class="codebar"><button class="copycode" data-id="code-25" type="button">Copiar código</button></div><pre><code id="code-25">object Ejemplo26 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(1, 2, 3)
+    println(numeros.foldLeft(0)(_ + _))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>foldRight</strong></td><td>Acumula desde la derecha con un valor de arranque.</td><td><div class="codebar"><button class="copycode" data-id="code-26" type="button">Copiar código</button></div><pre><code id="code-26">object Ejemplo27 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(1, 2, 3)
+    println(numeros.foldRight(0)(_ + _))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>flatMap</strong></td><td>Transforma y junta sublistas en una sola.</td><td><div class="codebar"><button class="copycode" data-id="code-27" type="button">Copiar código</button></div><pre><code id="code-27">object Ejemplo28 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(1, 2, 3)
+    println(numeros.flatMap(n =&gt; List(n, -n)))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>foreach</strong></td><td>Haz algo con cada elemento, por ejemplo mostrarlo.</td><td><div class="codebar"><button class="copycode" data-id="code-28" type="button">Copiar código</button></div><pre><code id="code-28">object Ejemplo29 {
+  def main(args: Array[String]): Unit = {
+    List("Ana", "Luis").foreach(println)
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>groupBy</strong></td><td>Agrupa registros según una clave.</td><td><div class="codebar"><button class="copycode" data-id="code-29" type="button">Copiar código</button></div><pre><code id="code-29">object Ejemplo30 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(1, 2, 3, 4)
+    println(numeros.groupBy(_ % 2 == 0))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>sortBy</strong></td><td>Organiza los datos con el criterio que te sirva.</td><td><div class="codebar"><button class="copycode" data-id="code-30" type="button">Copiar código</button></div><pre><code id="code-30">object Ejemplo31 {
+  def main(args: Array[String]): Unit = {
+    val nombres = List("Camila", "Ana", "Luis")
+    println(nombres.sortBy(_.length))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>partition</strong></td><td>Separa la lista en los que cumplen y los que no.</td><td><div class="codebar"><button class="copycode" data-id="code-31" type="button">Copiar código</button></div><pre><code id="code-31">object Ejemplo32 {
+  def main(args: Array[String]): Unit = {
+    val numeros = List(1, 2, 3, 4)
+    println(numeros.partition(_ % 2 == 0))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>find</strong></td><td>Encuentra el primero que cumpla lo pedido.</td><td><div class="codebar"><button class="copycode" data-id="code-32" type="button">Copiar código</button></div><pre><code id="code-32">object Ejemplo33 {
+  def main(args: Array[String]): Unit = {
+    println(List(3, 7, 8).find(_ % 2 == 0))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>exists</strong></td><td>Pregunta si al menos uno cumple.</td><td><div class="codebar"><button class="copycode" data-id="code-33" type="button">Copiar código</button></div><pre><code id="code-33">object Ejemplo34 {
+  def main(args: Array[String]): Unit = {
+    println(List(1, 3, 4).exists(_ % 2 == 0))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>forall</strong></td><td>Revisa si todos cumplen.</td><td><div class="codebar"><button class="copycode" data-id="code-34" type="button">Copiar código</button></div><pre><code id="code-34">object Ejemplo35 {
+  def main(args: Array[String]): Unit = {
+    println(List(2, 4, 6).forall(_ % 2 == 0))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>collect</strong></td><td>Filtra y transforma usando patrones.</td><td><div class="codebar"><button class="copycode" data-id="code-35" type="button">Copiar código</button></div><pre><code id="code-35">object Ejemplo36 {
+  def main(args: Array[String]): Unit = {
+    val datos: List[Any] = List(1, "error", 3)
+    println(datos.collect { case n: Int =&gt; n * 10 })
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>zip</strong></td><td>Pega dos colecciones según la posición.</td><td><div class="codebar"><button class="copycode" data-id="code-36" type="button">Copiar código</button></div><pre><code id="code-36">object Ejemplo37 {
+  def main(args: Array[String]): Unit = {
+    val nombres = List("Ana", "Luis")
+    val edades = List(20, 25)
+    println(nombres.zip(edades))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>take</strong></td><td>Saca los primeros N elementos.</td><td><div class="codebar"><button class="copycode" data-id="code-37" type="button">Copiar código</button></div><pre><code id="code-37">object Ejemplo38 {
+  def main(args: Array[String]): Unit = {
+    println(List(1, 2, 3, 4).take(2))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>drop</strong></td><td>Saltate los primeros N elementos.</td><td><div class="codebar"><button class="copycode" data-id="code-38" type="button">Copiar código</button></div><pre><code id="code-38">object Ejemplo39 {
+  def main(args: Array[String]): Unit = {
+    println(List(1, 2, 3, 4).drop(2))
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>sum / min / max</strong></td><td>Calcula suma, mínimo y máximo.</td><td><div class="codebar"><button class="copycode" data-id="code-39" type="button">Copiar código</button></div><pre><code id="code-39">object Ejemplo40 {
+  def main(args: Array[String]): Unit = {
+    val valores = List(5, 8, 2)
+    println(valores.sum)
+    println(valores.min)
+    println(valores.max)
+  }
+}</code></pre></td></tr><tr data-category="Programación funcional"><td>Programación funcional</td><td><strong>mkString</strong></td><td>Une los elementos en un solo texto.</td><td><div class="codebar"><button class="copycode" data-id="code-40" type="button">Copiar código</button></div><pre><code id="code-40">object Ejemplo41 {
+  def main(args: Array[String]): Unit = {
+    println(List("a", "b", "c").mkString(" | "))
+  }
+}</code></pre></td></tr><tr data-category="Clases y objetos"><td>Clases y objetos</td><td><strong>class / new</strong></td><td>Define una clase y crea un objeto con ella.</td><td><div class="codebar"><button class="copycode" data-id="code-41" type="button">Copiar código</button></div><pre><code id="code-41">object Ejemplo42 {
+  def main(args: Array[String]): Unit = {
+    class Persona(val nombre: String)
+    val persona = new Persona("Ana")
+    println(persona.nombre)
+  }
+}</code></pre></td></tr><tr data-category="Clases y objetos"><td>Clases y objetos</td><td><strong>case class</strong></td><td>Representa datos y comparalos por su contenido.</td><td><div class="codebar"><button class="copycode" data-id="code-42" type="button">Copiar código</button></div><pre><code id="code-42">object Ejemplo43 {
+  def main(args: Array[String]): Unit = {
+    case class Producto(id: Int, nombre: String)
+    val p = Producto(1, "Monitor")
+    println(p.copy(nombre = "Teclado"))
+  }
+}</code></pre></td></tr><tr data-category="Clases y objetos"><td>Clases y objetos</td><td><strong>trait / extends / override</strong></td><td>Comparte comportamientos entre clases.</td><td><div class="codebar"><button class="copycode" data-id="code-43" type="button">Copiar código</button></div><pre><code id="code-43">object Ejemplo44 {
+  def main(args: Array[String]): Unit = {
+    trait Saludable { def saludar: String }
+    class Persona extends Saludable {
+      override def saludar: String = "Hola"
+    }
+    println(new Persona().saludar)
+  }
+}</code></pre></td></tr><tr data-category="Manejo de errores"><td>Manejo de errores</td><td><strong>Option / getOrElse</strong></td><td>Muestra que un dato puede estar o faltar.</td><td><div class="codebar"><button class="copycode" data-id="code-44" type="button">Copiar código</button></div><pre><code id="code-44">object Ejemplo45 {
+  def main(args: Array[String]): Unit = {
+    val resultado: Option[Int] = Some(10)
+    println(resultado.getOrElse(0))
+  }
+}</code></pre></td></tr><tr data-category="Manejo de errores"><td>Manejo de errores</td><td><strong>Try</strong></td><td>Maneja conversiones que pueden fallar.</td><td><div class="codebar"><button class="copycode" data-id="code-45" type="button">Copiar código</button></div><pre><code id="code-45">import scala.util.Try
+
+object Ejemplo46 {
+  def main(args: Array[String]): Unit = {
+    val valor = Try("abc".toInt)
+    println(valor.toOption)
+  }
+}</code></pre></td></tr><tr data-category="Manejo de errores"><td>Manejo de errores</td><td><strong>Either</strong></td><td>Separa el error del resultado correcto.</td><td><div class="codebar"><button class="copycode" data-id="code-46" type="button">Copiar código</button></div><pre><code id="code-46">object Ejemplo47 {
+  def main(args: Array[String]): Unit = {
+    def validar(n: Int): Either[String, Int] =
+      if (n &gt; 0) Right(n) else Left("Debe ser positivo")
+    println(validar(-2))
+  }
+}</code></pre></td></tr><tr data-category="Manejo de errores"><td>Manejo de errores</td><td><strong>try / catch / finally</strong></td><td>Atiende errores y ejecuta el cierre de recursos.</td><td><div class="codebar"><button class="copycode" data-id="code-47" type="button">Copiar código</button></div><pre><code id="code-47">object Ejemplo48 {
+  def main(args: Array[String]): Unit = {
+    try {
+      println("12".toInt)
+    } catch {
+      case _: NumberFormatException =&gt; println("No es un número")
+    } finally {
+      println("Fin")
+    }
+  }
+}</code></pre></td></tr><tr data-category="Manejo de errores"><td>Manejo de errores</td><td><strong>throw</strong></td><td>Lanza un error cuando se rompe una regla.</td><td><div class="codebar"><button class="copycode" data-id="code-48" type="button">Copiar código</button></div><pre><code id="code-48">object Ejemplo49 {
+  def main(args: Array[String]): Unit = {
+    def validar(n: Int): Int = {
+      if (n &lt; 0) throw new IllegalArgumentException("Negativo")
+      n
+    }
+    println(validar(2))
+  }
+}</code></pre></td></tr></tbody></table></div><p hidden="" id="emptySyntax">No hay resultados con esos filtros.</p></section></main><script>
+(function () {
+  "use strict";
+
+  function iniciarFiltros() {
+    const buscar = document.getElementById("searchSyntax");
+    const categoria = document.getElementById("categorySyntax");
+    const limpiar = document.getElementById("resetSyntax");
+    const contador = document.getElementById("countSyntax");
+    const vacio = document.getElementById("emptySyntax");
+    const filas = Array.from(document.querySelectorAll(".syntax-table tbody tr"));
+
+    if (!buscar || !categoria || !contador || !vacio || !filas.length) return;
+
+    const normalizar = function (valor) {
+      return (valor || "").toString().toLowerCase().normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "").trim();
+    };
+
+    // Las opciones salen directamente del campo «Tipo» de la tabla.
+    // Así nunca quedan categorías vacías, distintas o desactualizadas.
+    const tiposDeTabla = Array.from(new Set(filas.map(function (fila) {
+      return (fila.querySelector("td")?.textContent || "").trim();
+    }).filter(Boolean))).sort(function (a, b) { return a.localeCompare(b, "es"); });
+    categoria.replaceChildren(new Option("Todos", ""));
+    tiposDeTabla.forEach(function (tipo) {
+      categoria.add(new Option(tipo, tipo));
+    });
+
+    const indices = filas.map(function (fila) {
+      const celdas = fila.querySelectorAll("td");
+      return {
+        tipo: fila.getAttribute("data-category") || "",
+        texto: Array.from(celdas).map(function (celda) { return celda.textContent; }).join(" ")
+      };
+    });
+
+    function actualizar() {
+      const texto = normalizar(buscar.value);
+      const tipo = categoria.value;
+      let visibles = 0;
+
+      filas.forEach(function (fila, indice) {
+        const dato = indices[indice];
+        const coincide = (tipo === "" || dato.tipo === tipo) &&
+          (texto === "" || normalizar(dato.texto).includes(texto));
+        fila.hidden = !coincide;
+        fila.classList.toggle("is-filtered", !coincide);
+        fila.style.display = coincide ? "" : "none";
+        if (coincide) visibles += 1;
+      });
+
+      contador.textContent = visibles + " de " + filas.length + " registros";
+      vacio.hidden = visibles !== 0;
+      vacio.style.display = visibles === 0 ? "block" : "none";
+    }
+
+    buscar.addEventListener("input", actualizar);
+    buscar.addEventListener("search", actualizar);
+    categoria.addEventListener("input", actualizar);
+    categoria.addEventListener("change", actualizar);
+    if (limpiar) {
+      limpiar.addEventListener("click", function () {
+        buscar.value = "";
+        categoria.value = "";
+        actualizar();
+        buscar.focus();
+      });
+    }
+
+    document.querySelectorAll(".copycode").forEach(function (boton) {
+      boton.addEventListener("click", async function () {
+        const bloque = document.getElementById(boton.getAttribute("data-id"));
+        if (!bloque) return;
+        const codigo = bloque.textContent;
+        try {
+          if (!navigator.clipboard || !navigator.clipboard.writeText) throw new Error("Sin acceso al portapapeles");
+          await navigator.clipboard.writeText(codigo);
+        } catch (e) {
+          const area = document.createElement("textarea");
+          area.value = codigo;
+          area.setAttribute("readonly", "");
+          area.style.position = "fixed";
+          area.style.opacity = "0";
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+        }
+        boton.textContent = "Copiado";
+        setTimeout(function () { boton.textContent = "Copiar código"; }, 1400);
+      });
+    });
+
+    actualizar();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", iniciarFiltros);
+  } else {
+    iniciarFiltros();
+  }
+})();
+</script></body></html>

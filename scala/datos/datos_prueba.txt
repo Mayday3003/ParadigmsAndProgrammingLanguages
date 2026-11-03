@@ -1,0 +1,58 @@
+abc
+6
+S001
+Bancolombia
+Laura Gómez
+Hardware
+Alta
+Pendiente
+8
+45000
+S001
+S002
+
+Bancolombia
+Carlos Ruiz
+Sistemas
+2
+1
+en proceso
+-3
+5
+50000
+S003
+EAFIT
+Laura Gómez
+3
+Alta
+2
+12
+40000
+S004
+Clínica Las Vegas
+Andrés Mejía
+Software
+Baja
+Finalizado
+2
+35000
+S005
+EAFIT
+Carlos Ruiz
+Redes
+3
+3
+6,5
+diez
+60000
+S006
+bancolombia
+Andrés Mejía
+1
+Alta
+Finalizado
+10
+38000
+13
+99
+0
