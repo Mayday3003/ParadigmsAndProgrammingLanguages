@@ -29,7 +29,9 @@ def generar_entrada(n: int, semilla: int = 360) -> Path:
         lineas += [f"S{i:05d}", rnd.choice(CLIENTES), rnd.choice(TECNICOS), str(rnd.randint(1, 3)),
                    str(rnd.randint(1, 3)), str(rnd.randint(1, 3)), f"{rnd.uniform(0.5, 40):.1f}",
                    str(rnd.randrange(20000, 120000, 500))]
-    lineas += ["13", "0"]  # mostrar todos los reportes y salir
+    # Recorre las opciones 1..30 del menú (cada reporte, "mostrar todos" y opciones inválidas) y sale con 0.
+    # No depende de cuántos reportes tenga el menú: funciona aunque se agreguen nuevos.
+    lineas += [str(op) for op in range(1, 31)] + ["0"]
     destino = SALIDAS_DIR / "entradas" / f"entrada_{n}.txt"
     destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text("\n".join(lineas) + "\n", encoding="utf-8")

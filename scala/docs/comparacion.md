@@ -91,7 +91,30 @@ def promedio(valores: tuple) -> Optional[float]:
 | Tamaño del código | ~495 líneas en 6 archivos | ~490 líneas en 6 archivos |
 | Curva de aprendizaje | Más difícil | Muy fácil de leer y escribir |
 
-## 3. Conclusión: para esta práctica Scala es mejor
+## 3. Evidencia medida (análisis automático)
+
+Resultados de `analisis/analizar.sh` (ver `analisis/reporte/dashboard.html`; los números se recalculan en
+cada ejecución):
+
+| Evidencia | Scala | Python |
+|---|---|---|
+| Calidad en SonarQube (bugs / vulnerabilidades / code smells) | 0 / 0 / 0 · nota A | 0 / 0 / 0 · nota A |
+| Complejidad cognitiva total (SonarQube) | **24** | 39 |
+| Violaciones a las reglas de la práctica | 0 | 0 |
+| Errores inyectados detectados **antes de ejecutar** | **5 de 5** | 0 de 5 |
+| Recursión bajo estrés (máximo de solicitudes procesadas) | **20.000** (y más, gracias a `@tailrec`) | 5.000 (con 10.000: `RecursionError`) |
+| Tiempo con 10 solicitudes (incluye arranque) | 0,5 s (arranque de la JVM) | **0,07 s** |
+| Compilación antes de ejecutar | 14 s | **0,1 s** |
+
+Veredicto por escenario: Scala gana **funcional estricto**, **sistema empresarial** y **gran volumen**;
+Python gana **prototipo rápido**, **equipo junior** y **script ocasional**.
+
+Los dos programas cumplen las reglas, pero el experimento de errores inyectados muestra la diferencia de fondo:
+en Scala el **compilador impide** romper el paradigma (reasignar un `val`, mutar una `case class`, usar un
+tipo equivocado, un campo inexistente o un `match` incompleto); en Python esos errores solo aparecen al
+ejecutar o nunca.
+
+## 4. Conclusión: para esta práctica Scala es mejor
 
 El problema consiste en transformar y resumir una colección (filtrar, agrupar, contar, ordenar, sumar)
 respetando reglas funcionales estrictas, y **Scala garantiza esas reglas en lugar de solo permitirlas**:

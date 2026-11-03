@@ -4,10 +4,13 @@ import scala.annotation.tailrec
 
 object Main:
 
+  /** Número de la opción "Mostrar todos": siempre la siguiente al último reporte. */
+  private val opcionTodos: Int = Reportes.todos.size + 1
+
   private def menu: String =
     ("\n=================== MENÚ DE CONSULTAS — SOPORTE360 ===================" ::
       Reportes.todos.zipWithIndex.map { case ((nombre, _), i) => f"  ${i + 1}%2d. $nombre" } :::
-      List("  13. Mostrar todos los reportes", "   0. Salir")).mkString("\n")
+      List(f"  $opcionTodos%2d. Mostrar todos los reportes", "   0. Salir")).mkString("\n")
 
   private def todosLosReportes(ls: List[Solicitud]): String =
     Reportes.todos.map((_, reporte) => reporte(ls)).mkString("\n")
@@ -17,7 +20,7 @@ object Main:
     println(menu)
     Entrada.pedir("Seleccione una opción: ", Validacion.enteroNoNegativo("Opción")) match
       case 0 => println("\nGracias por usar Soporte360. ¡Hasta pronto!")
-      case 13 =>
+      case n if n == opcionTodos =>
         println(todosLosReportes(ls))
         consultar(ls)
       case n if n <= Reportes.todos.size =>

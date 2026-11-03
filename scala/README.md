@@ -25,6 +25,9 @@ scala/
 │       ├── Analisis.scala     ← RF03–RF12, RF14: lógica pura sobre List
 │       ├── Reportes.scala     ← formato de cada reporte (dos decimales, tablas)
 │       └── Main.scala         ← punto de entrada y menú de consultas
+├── analisis/                  ← análisis comparativo automático (SonarQube + métricas + experimentos)
+│   ├── analizar.sh            ← ./analizar.sh genera reporte/dashboard.html
+│   └── reporte/dashboard.html ← dashboard visual con el veredicto por escenario
 └── soporte360-python/         ← misma solución y mismos módulos que Scala
     ├── modelo.py
     ├── validacion.py
@@ -101,5 +104,14 @@ Python no prohíbe nada de esto, así que se aplicó por disciplina:
 Ver [docs/comparacion.md](docs/comparacion.md): código lado a lado, tabla comparativa y conclusión.
 **En resumen: Scala es mejor para esta práctica** porque garantiza las reglas funcionales (inmutabilidad,
 tipos, `Either`/`Option`, `@tailrec`) en lugar de depender de la disciplina del programador.
+
+### Análisis automático (SonarQube + experimentos)
+```bash
+cd analisis && ./analizar.sh      # luego abrir analisis/reporte/dashboard.html
+```
+Analiza el código actual de los dos lenguajes con **SonarQube Cloud (SonarAnalyzer)**, lizard, un verificador
+de las reglas de la práctica, benchmarks y experimentos de garantías funcionales, y decide cuál lenguaje es
+mejor en 6 escenarios. Si se cambia el código, basta con volver a ejecutarlo. Detalles en
+[analisis/README.md](analisis/README.md).
 
 Para preparar la exposición: [docs/sustentacion.md](docs/sustentacion.md).

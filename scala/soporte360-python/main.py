@@ -12,11 +12,15 @@ from reportes import REPORTES, lineas, reporte_general, reporte_resumen_ejecutiv
 from validacion import entero_no_negativo
 
 
+# Número de la opción "Mostrar todos": siempre la siguiente al último reporte.
+OPCION_TODOS = len(REPORTES) + 1
+
+
 def menu() -> str:
     return lineas(
         ("\n=================== MENÚ DE CONSULTAS — SOPORTE360 ===================",)
         + tuple(map(lambda p: f"  {p[0]:>2}. {p[1][0]}", enumerate(REPORTES, start=1)))
-        + ("  13. Mostrar todos los reportes", "   0. Salir"))
+        + (f"  {OPCION_TODOS:>2}. Mostrar todos los reportes", "   0. Salir"))
 
 
 def consultar(ls: tuple) -> None:
@@ -25,7 +29,7 @@ def consultar(ls: tuple) -> None:
     if op == 0:
         print("\nGracias por usar Soporte360. ¡Hasta pronto!")
         return
-    print(lineas(map(lambda r: r[1](ls), REPORTES)) if op == 13
+    print(lineas(map(lambda r: r[1](ls), REPORTES)) if op == OPCION_TODOS
           else REPORTES[op - 1][1](ls) if op <= len(REPORTES)
           else "   [ERROR] Opción no válida.")
     consultar(ls)
